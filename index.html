@@ -1583,6 +1583,18 @@ footer p{
 .event-modal-info{padding:18px;margin-bottom:18px;border-radius:14px;background:rgba(0,217,255,.05);border:1px solid rgba(0,217,255,.15)}.event-modal-info p{color:var(--muted);line-height:1.5;margin:7px 0}.event-modal-info strong{color:#fff}
 @media(max-width:850px){.promo-grid{grid-template-columns:1fr}.redeem-row{flex-direction:column}.redeem-btn{width:100%}}
 
+
+.event-special-rule {
+    margin: 12px 0;
+    padding: 10px 12px;
+    border-left: 3px solid var(--accent, #facc15);
+    border-radius: 8px;
+    background: rgba(250, 204, 21, 0.08);
+    color: inherit;
+    font-size: 0.88rem;
+    line-height: 1.45;
+}
+
 </style>
 </head>
 
@@ -1929,11 +1941,12 @@ footer p{
             <h3>GRAN EVENTO DE DIAMANTES</h3>
             <p><strong>2V2</strong><br>Tú y tu dúo se enfrentan a otro equipo.</p>
             <div class="event-data">
-                <span>💰 Inscripción: <strong>$12.000 COP / equipo</strong></span>
+                <span>💰 Inscripción: <strong>$17.000 COP / equipo</strong></span>
                 <span>🏆 Premio: <strong>1.000 💎 al equipo ganador</strong></span>
                 <span>⚔️ Formato: <strong>2 equipos • 2V2</strong></span>
             </div>
-            <button class="event-btn" onclick="openEventModal('EASY','2V2','$12.000 COP por equipo','1.000 💎','Tú y tu dúo podrían llevarse 1.000 DIAMANTES si ganan el PVP contra otro equipo.')">🏆 INSCRIBIRME</button>
+            <p class="event-special-rule">📜 Fase final: el equipo ganador avanza a un 1V1 entre sus 2 integrantes. Quien gane ese duelo será la única persona ganadora y recibirá el premio.</p>
+            <button class="event-btn" onclick="openEventModal('EASY','2V2','$17.000 COP por equipo','1.000 💎','Tú y tu dúo podrían llevarse 1.000 DIAMANTES si ganan el PVP contra otro equipo.')">🏆 INSCRIBIRME</button>
         </div>
         <div class="event event-normal">
             <div class="event-tier">🔵 NORMAL</div><div class="event-icon">⚔️</div>
@@ -1944,6 +1957,7 @@ footer p{
                 <span>🏆 Premio: <strong>500 💎 al ganador</strong></span>
                 <span>⚔️ Formato: <strong>1V1 • 2 jugadores</strong></span>
             </div>
+            <p class="event-special-rule">📜 Fase final: al ser un 1V1, quien gane el enfrentamiento será la única persona ganadora y recibirá el premio.</p>
             <button class="event-btn" onclick="openEventModal('NORMAL','1V1','$10.000 COP por jugador','500 💎','Enfrentamiento individual. El ganador recibe 500 DIAMANTES.')">⚔️ INSCRIBIRME</button>
         </div>
         <div class="event event-pro">
@@ -1951,27 +1965,29 @@ footer p{
             <h3>PRO DIAMOND WAR</h3>
             <p><strong>4V4</strong><br>Forma tu escuadra y enfréntate a otro equipo.</p>
             <div class="event-data">
-                <span>💰 Inscripción: <strong>$35.000 COP / equipo</strong></span>
+                <span>💰 Inscripción: <strong>$42.000 COP / equipo</strong></span>
                 <span>🏆 Premio: <strong>2.500 💎 al equipo ganador</strong></span>
                 <span>⚔️ Formato: <strong>2 equipos • 4V4</strong></span>
             </div>
-            <button class="event-btn" onclick="openEventModal('PRO','4V4','$35.000 COP por equipo','2.500 💎','Forma tu escuadra de 4 jugadores y compite por 2.500 DIAMANTES.')">🔥 INSCRIBIRME</button>
+            <p class="event-special-rule">📜 Fase final: el equipo ganador avanza a un 2V2 entre sus 4 integrantes. Los 2 jugadores que ganen pasan a un 1V1 final. Quien gane será la única persona ganadora y recibirá el premio.</p>
+            <button class="event-btn" onclick="openEventModal('PRO','4V4','$42.000 COP por equipo','2.500 💎','Forma tu escuadra de 4 jugadores y compite por 2.500 DIAMANTES.')">🔥 INSCRIBIRME</button>
         </div>
         <div class="event event-premium">
             <div class="event-tier">👑 PREMIUM</div><div class="event-icon">💎</div>
             <h3>DIAMOND CHAMPIONS</h3>
             <p><strong>8V8</strong><br>El gran enfrentamiento por un premio mayor.</p>
             <div class="event-data">
-                <span>💰 Inscripción: <strong>$75.000 COP / equipo</strong></span>
+                <span>💰 Inscripción: <strong>$78.000 COP / equipo</strong></span>
                 <span>🏆 Premio: <strong>5.000 💎 al equipo ganador</strong></span>
                 <span>⚔️ Formato: <strong>2 equipos • 8V8</strong></span>
             </div>
-            <button class="event-btn" onclick="openEventModal('PREMIUM','8V8','$75.000 COP por equipo','5.000 💎','El gran PVP 8V8. El equipo ganador recibe 5.000 DIAMANTES.')">👑 INSCRIBIRME</button>
+            <p class="event-special-rule">📜 Fase final: el equipo ganador avanza a un 4V4 entre sus 8 integrantes. Los 4 jugadores que ganen pasan a un 2V2; los 2 ganadores disputan un 1V1 final. Quien gane será la única persona ganadora y recibirá el premio.</p>
+            <button class="event-btn" onclick="openEventModal('PREMIUM','8V8','$78.000 COP por equipo','5.000 💎','El gran PVP 8V8. El equipo ganador recibe 5.000 DIAMANTES.')">👑 INSCRIBIRME</button>
         </div>
     </div>
     <div class="event-rules">
         <h3>📜 REGLAS BÁSICAS DEL EVENTO</h3>
-        <p>• El pago de inscripción debe confirmarse antes de participar.<br>• El equipo debe estar completo según la modalidad elegida.<br>• El premio se entrega después de verificar el resultado del PVP.<br>• Las fechas, horarios, sala y reglas específicas se informarán por WhatsApp.</p>
+        <p>• El pago de inscripción debe confirmarse antes de participar.<br>• El equipo debe estar completo según la modalidad elegida.<br>• El premio se entrega después de verificar el resultado del PVP.<br>• En las modalidades por equipos, el equipo ganador avanza a rondas eliminatorias entre sus integrantes: 8V8 → 4V4 → 2V2 → 1V1; 4V4 → 2V2 → 1V1; 2V2 → 1V1. Solo quien gane el 1V1 final recibe el premio.<br>• Las fechas, horarios, sala y reglas específicas se informarán por WhatsApp.</p>
     </div>
 </section>
 
