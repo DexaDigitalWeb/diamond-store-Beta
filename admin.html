@@ -649,8 +649,12 @@ function openOrder(id){
 
     <div class="comprobante-box">
       <b>🧾 Comprobante de pago</b><br>
-      Este pedido actualmente no guarda una imagen de comprobante en Supabase.
-      Verifica el comprobante recibido por WhatsApp antes de marcarlo como completado.
+      ${order.comprobante_url
+        ? 'El comprobante está guardado de forma privada en Supabase. Puedes abrirlo desde aquí.'
+        : 'Este pedido no tiene un comprobante guardado. Verifica el comprobante recibido por WhatsApp.'}
+      ${order.comprobante_url
+        ? `<div style="margin-top:10px"><button class="btn blue" type="button" onclick="viewComprobante(${Number(order.id)})">👁️ Ver comprobante</button></div>`
+        : ''}
     </div>
   `;
 
@@ -663,6 +667,29 @@ function openOrder(id){
   `;
 
   modal.classList.remove('hidden');
+}
+
+async function viewComprobante(id){
+  const order = getOrder(id);
+  if(!order || !order.comprobante_url){
+    alert('Este pedido no tiene un comprobante guardado.');
+    return;
+  }
+
+  try{
+    const {data,error} = await supabaseClient.storage
+      .from('comprobantes')
+      .createSignedUrl(order.comprobante_url, 300);
+
+    if(error || !data?.signedUrl){
+      throw new Error(error?.message || 'No se pudo generar el enlace seguro.');
+    }
+
+    window.open(data.signedUrl, '_blank', 'noopener,noreferrer');
+  }catch(error){
+    console.error('Error al abrir comprobante:', error);
+    alert('❌ No se pudo abrir el comprobante: ' + (error.message || 'error desconocido'));
+  }
 }
 
 function closeOrder(){

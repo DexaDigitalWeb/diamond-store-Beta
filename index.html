@@ -701,7 +701,12 @@ footer p{margin-top:10px;color:var(--muted);font-size:.95rem;line-height:1.6}
                 <div class="payment-title">💳 PAGO POR NEQUI</div>
                 <p>Primero realiza el pago del pedido.</p>
                 <div class="nequi-number">📱 300 180 5830</div>
-                <div class="payment-note">Después del pago, guarda el comprobante. Lo enviaremos junto con tu pedido por WhatsApp.</div>
+                <div class="payment-note">Después del pago, selecciona el comprobante. Se guardará de forma privada para que el administrador pueda verificarlo.</div>
+            </div>
+            <div class="input-group">
+                <label for="comprobanteFile">🧾 COMPROBANTE DE PAGO</label>
+                <input id="comprobanteFile" class="input" type="file" accept="image/jpeg,image/png,image/webp" onchange="showReceiptName()">
+                <small id="comprobanteHelp" style="display:block;margin-top:7px;opacity:.75;line-height:1.45">JPG, PNG o WEBP · máximo 8 MB. El comprobante se guarda de forma privada.</small>
             </div>
             <div class="accum-check" id="accumCheckBox">
                 <label>
@@ -770,6 +775,59 @@ async function saveOrderToSupabase(order){
     }
 
     return true;
+}
+
+async function uploadComprobante(file, playerId){
+    if(!file) throw new Error('No se seleccionó el comprobante.');
+
+    const allowedTypes = ['image/jpeg','image/png','image/webp'];
+    if(!allowedTypes.includes(file.type)){
+        throw new Error('El comprobante debe ser JPG, PNG o WEBP.');
+    }
+    if(file.size > 8 * 1024 * 1024){
+        throw new Error('El comprobante no puede superar 8 MB.');
+    }
+
+    const extensionMap = {
+        'image/jpeg':'jpg',
+        'image/png':'png',
+        'image/webp':'webp'
+    };
+    const extension = extensionMap[file.type];
+    const safePlayerId = String(playerId).replace(/[^a-zA-Z0-9_-]/g,'_');
+    const path = `pedido_${safePlayerId}_${Date.now()}_${Math.random().toString(36).slice(2,8)}.${extension}`;
+
+    const response = await fetch(`${SUPABASE_URL}/storage/v1/object/comprobantes/${encodeURIComponent(path)}`, {
+        method: 'POST',
+        headers: {
+            'apikey': SUPABASE_KEY,
+            'Content-Type': file.type,
+            'x-upsert': 'false'
+        },
+        body: file
+    });
+
+    if(!response.ok){
+        const errorText = await response.text();
+        throw new Error(`Storage ${response.status}: ${errorText}`);
+    }
+
+    return path;
+}
+
+function showReceiptName(){
+    const input = document.getElementById('comprobanteFile');
+    const help = document.getElementById('comprobanteHelp');
+    if(!input || !help) return;
+
+    const file = input.files && input.files[0];
+    if(!file){
+        help.textContent = 'JPG, PNG o WEBP · máximo 8 MB. El comprobante se guarda de forma privada.';
+        return;
+    }
+
+    const mb = (file.size / (1024*1024)).toFixed(2);
+    help.textContent = `✅ ${file.name} · ${mb} MB · listo para subir de forma privada.`;
 }
 
 
@@ -1184,11 +1242,14 @@ async function processOrder(){
     const playerId = document.getElementById('playerId').value.trim();
     const paid = document.getElementById('paymentCheck').checked;
     const activateAccum = document.getElementById('activateAccum').checked;
+    const comprobanteInput = document.getElementById('comprobanteFile');
+    const comprobanteFile = comprobanteInput && comprobanteInput.files ? comprobanteInput.files[0] : null;
 
     if(!playerId){ toast('⚠️ Primero ingresa tu ID de jugador.'); return; }
     if(playerId.length < 4){ toast('⚠️ Revisa tu ID de jugador.'); return; }
     if(!paid){ toast('💳 Debes realizar el pago por Nequi y marcar la casilla de confirmación.'); return; }
     if(!currentPackage){ toast('⚠️ No se encontró el paquete seleccionado.'); return; }
+    if(!comprobanteFile){ toast('🧾 Selecciona el comprobante de pago antes de continuar.'); return; }
 
     const diamondsNumber = currentPackage.diamonds;
     const priceNumber = currentPackage.price;
@@ -1215,11 +1276,17 @@ async function processOrder(){
         button.textContent = '⏳ GUARDANDO PEDIDO...';
     }
 
+    let comprobantePath = '';
     try{
+        if(button) button.textContent = '⏳ SUBIENDO COMPROBANTE...';
+        comprobantePath = await uploadComprobante(comprobanteFile, playerId);
+
+        if(button) button.textContent = '⏳ GUARDANDO PEDIDO...';
+        order.comprobante_url = comprobantePath;
         await saveOrderToSupabase(order);
     }catch(error){
-        console.error('Error al guardar pedido en Supabase:', error);
-        toast('❌ No se pudo guardar el pedido. Revisa la conexión con Supabase.');
+        console.error('Error al guardar comprobante/pedido:', error);
+        toast('❌ No se pudo guardar el comprobante o el pedido: ' + (error.message || 'error desconocido'));
         if(button){
             button.disabled = false;
             button.textContent = originalButtonText;
@@ -1263,8 +1330,8 @@ $${saving} COP
 Realizado por Nequi al
 📱 300 180 5830
 
-📸 Enviaré el comprobante de pago
-para que puedan verificarlo.
+📸 El comprobante quedó guardado de forma privada en el pedido.
+También lo enviaré por WhatsApp para facilitar la verificación.
 
 ⏳ *ESTADO:*
 En espera de revisión del pago.
