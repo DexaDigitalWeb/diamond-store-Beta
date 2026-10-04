@@ -127,6 +127,43 @@ tr:last-child td{border-bottom:0}
   .stat .value{font-size:21px}
   .nav{min-height:62px}
 }
+
+.modal-backdrop{
+  position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.72);
+  display:grid;place-items:center;padding:16px;
+}
+.modal{
+  width:min(720px,100%);max-height:92vh;overflow:auto;
+  background:#0b1222;border:1px solid var(--line);border-radius:18px;
+  box-shadow:0 25px 90px rgba(0,0,0,.55);
+}
+.modal-head{
+  position:sticky;top:0;background:#0d172a;border-bottom:1px solid var(--line);
+  padding:16px 18px;display:flex;justify-content:space-between;gap:12px;align-items:center;
+}
+.modal-head h2{margin:0;font-size:20px}
+.modal-close{font-size:24px;padding:6px 10px}
+.modal-body{padding:18px}
+.detail-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.detail{
+  background:#07101f;border:1px solid rgba(255,255,255,.07);
+  border-radius:12px;padding:12px;
+}
+.detail .k{font-size:11px;color:var(--muted);text-transform:uppercase;margin-bottom:5px}
+.detail .v{font-weight:800;word-break:break-word}
+.detail.full{grid-column:1/-1}
+.modal-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.btn.blue{background:rgba(0,191,255,.12);color:#65dcff;border-color:rgba(0,191,255,.3)}
+.comprobante-box{
+  margin-top:14px;padding:14px;border-radius:12px;
+  background:rgba(255,216,77,.07);border:1px solid rgba(255,216,77,.2);
+  color:#ffe88a;
+}
+@media(max-width:560px){
+  .detail-grid{grid-template-columns:1fr}
+  .detail.full{grid-column:auto}
+}
+
 </style>
 </head>
 <body>
@@ -216,7 +253,7 @@ tr:last-child td{border-bottom:0}
           <th>Pago</th>
           <th>Acumulativa</th>
           <th>Estado</th>
-          <th>Acciones</th>
+          <th>Gestionar</th>
         </tr>
       </thead>
       <tbody id="ordersBody"></tbody>
@@ -228,6 +265,21 @@ tr:last-child td{border-bottom:0}
   </div>
 </main>
 </section>
+
+
+<!-- DETALLE DEL PEDIDO -->
+<div id="orderModal" class="modal-backdrop hidden">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-head">
+      <h2 id="modalTitle">📦 Detalle del pedido</h2>
+      <button class="btn modal-close" id="closeModal" type="button">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="modalContent"></div>
+      <div class="modal-actions" id="modalActions"></div>
+    </div>
+  </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -412,6 +464,7 @@ function renderOrders(){
       <td><span class="badge ${statusClass(status)}">${escapeHtml(status)}</span></td>
       <td>
         <div class="row-actions">
+          <button class="btn" onclick="openOrder(${Number(order.id)})">👁️ Ver</button>
           ${status !== 'Pagado' ? `<button class="btn blue" onclick="changeStatus(${Number(order.id)},'Pagado')">💳 Pagado</button>` : ''}
           ${status !== 'Completado' ? `<button class="btn green" onclick="changeStatus(${Number(order.id)},'Completado')">✅ Completar</button>` : ''}
           ${status !== 'Rechazado' ? `<button class="btn red" onclick="changeStatus(${Number(order.id)},'Rechazado')">❌ Rechazar</button>` : ''}
@@ -423,6 +476,75 @@ function renderOrders(){
     body.appendChild(tr);
   });
 }
+
+
+function getOrder(id){
+  return allOrders.find(o => Number(o.id) === Number(id));
+}
+
+function openOrder(id){
+  const order = getOrder(id);
+  if(!order) return;
+
+  const status = order.estado || 'En espera de revisión del pago';
+  const modal = document.getElementById('orderModal');
+  const content = document.getElementById('modalContent');
+  const actions = document.getElementById('modalActions');
+
+  document.getElementById('modalTitle').textContent = `📦 Pedido #${order.id}`;
+
+  content.innerHTML = `
+    <div class="detail-grid">
+      <div class="detail"><div class="k">Fecha</div><div class="v">${escapeHtml(dateText(order.created_at))}</div></div>
+      <div class="detail"><div class="k">Estado</div><div class="v"><span class="badge ${statusClass(status)}">${escapeHtml(status)}</span></div></div>
+      <div class="detail"><div class="k">ID del jugador</div><div class="v">${escapeHtml(order.jugador_id || 'No indicado')}</div></div>
+      <div class="detail"><div class="k">Personaje / nombre</div><div class="v">${escapeHtml(order.personaje || 'No indicado')}</div></div>
+      <div class="detail"><div class="k">Paquete</div><div class="v">${escapeHtml(order.paquete || ((order.diamantes || 0) + ' Diamantes'))}</div></div>
+      <div class="detail"><div class="k">Diamantes</div><div class="v">${Number(order.diamantes || 0).toLocaleString('es-CO')} 💎</div></div>
+      <div class="detail"><div class="k">Total</div><div class="v">${money(order.total)}</div></div>
+      <div class="detail"><div class="k">Método de pago</div><div class="v">${escapeHtml(order.metodo_pago || 'No indicado')}</div></div>
+      <div class="detail"><div class="k">Recarga acumulativa</div><div class="v">${order.recarga_acumulativa ? '🔥 Sí' : 'No'}</div></div>
+      <div class="detail"><div class="k">ID interno</div><div class="v">#${escapeHtml(String(order.id ?? ''))}</div></div>
+    </div>
+
+    <div class="comprobante-box">
+      <b>🧾 Comprobante de pago</b><br>
+      Este pedido actualmente no guarda una imagen de comprobante en Supabase.
+      Verifica el comprobante recibido por WhatsApp antes de marcarlo como completado.
+    </div>
+  `;
+
+  actions.innerHTML = `
+    <button class="btn" type="button" onclick="copyText('${escapeHtml(String(order.jugador_id || ''))}')">📋 Copiar ID</button>
+    ${status !== 'Pagado' ? `<button class="btn blue" type="button" onclick="changeStatus(${Number(order.id)},'Pagado'); closeOrder()">💳 Marcar pagado</button>` : ''}
+    ${status !== 'Completado' ? `<button class="btn green" type="button" onclick="changeStatus(${Number(order.id)},'Completado'); closeOrder()">✅ Completar</button>` : ''}
+    ${status !== 'Rechazado' ? `<button class="btn red" type="button" onclick="changeStatus(${Number(order.id)},'Rechazado'); closeOrder()">❌ Rechazar</button>` : ''}
+    ${status === 'Rechazado' ? `<button class="btn yellow" type="button" onclick="changeStatus(${Number(order.id)},'En espera de revisión del pago'); closeOrder()">↩️ Reabrir</button>` : ''}
+  `;
+
+  modal.classList.remove('hidden');
+}
+
+function closeOrder(){
+  document.getElementById('orderModal').classList.add('hidden');
+}
+
+async function copyText(value){
+  try{
+    await navigator.clipboard.writeText(value);
+    alert('✅ ID copiado');
+  }catch(e){
+    alert('ID del jugador: ' + value);
+  }
+}
+
+document.getElementById('closeModal').addEventListener('click', closeOrder);
+document.getElementById('orderModal').addEventListener('click',(e)=>{
+  if(e.target.id === 'orderModal') closeOrder();
+});
+document.addEventListener('keydown',(e)=>{
+  if(e.key === 'Escape') closeOrder();
+});
 
 async function changeStatus(id,status){
   const labels = {
