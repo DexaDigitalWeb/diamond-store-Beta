@@ -183,6 +183,24 @@ tr:last-child td{border-bottom:0}
 }
 
 
+
+.order-tabs{
+  display:flex;gap:8px;flex-wrap:wrap;margin:0 0 15px;
+  padding:8px;background:rgba(11,18,34,.9);border:1px solid var(--line);border-radius:14px;
+}
+.order-tab{
+  border:1px solid rgba(255,255,255,.08);background:#07101f;color:var(--muted);
+  padding:10px 13px;border-radius:10px;font-weight:800;font-size:13px;
+}
+.order-tab:hover{border-color:var(--cyan);color:var(--text)}
+.order-tab.active{background:rgba(0,191,255,.14);border-color:rgba(0,245,255,.45);color:#fff;box-shadow:0 0 16px rgba(0,245,255,.07)}
+.order-tab .count{margin-left:5px;color:var(--cyan)}
+.receipt-preview{margin-top:14px;background:#050814;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px;text-align:center}
+.receipt-preview img{display:block;width:100%;max-height:520px;object-fit:contain;border-radius:10px;background:#000}
+.receipt-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px}
+.receipt-loading{padding:25px;color:var(--cyan);text-align:center}
+@media(max-width:700px){.order-tabs{overflow-x:auto;flex-wrap:nowrap}.order-tab{white-space:nowrap}}
+
 .role-badge{
   display:inline-flex;
   align-items:center;
@@ -280,6 +298,15 @@ tr:last-child td{border-bottom:0}
     <button class="btn" id="clearFilters">Limpiar</button>
   </div>
 
+  <div class="order-tabs" id="orderTabs">
+    <button class="order-tab active" data-view="new">🆕 Nuevos <span class="count" id="countNew">0</span></button>
+    <button class="order-tab" data-view="process">💳 En proceso <span class="count" id="countProcess">0</span></button>
+    <button class="order-tab" data-view="done">✅ Completados <span class="count" id="countDone">0</span></button>
+    <button class="order-tab" data-view="cancelled">❌ Cancelados <span class="count" id="countCancelled">0</span></button>
+    <button class="order-tab" data-view="old">🗂️ Antiguos <span class="count" id="countOld">0</span></button>
+    <button class="order-tab" data-view="all">📦 Todos <span class="count" id="countAll">0</span></button>
+  </div>
+
   <div class="table-wrap">
     <div id="loading" class="loading">⏳ Cargando pedidos...</div>
     <div id="empty" class="empty hidden">No hay pedidos que coincidan.</div>
@@ -336,6 +363,7 @@ const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let allOrders = [];
 let currentAdmin = null;
+let currentView = 'new';
 
 const loginView = document.getElementById('loginView');
 const adminView = document.getElementById('adminView');
@@ -503,7 +531,9 @@ function startOfDay(d){
 
 function updateStats(orders){
   const waiting = orders.filter(o => !o.estado || o.estado === 'En espera de revisión del pago').length;
+  const process = orders.filter(o => o.estado === 'Pagado').length;
   const doneOrders = orders.filter(o => o.estado === 'Completado');
+  const rejected = orders.filter(o => o.estado === 'Rechazado').length;
   const sales = doneOrders.reduce((sum,o)=>sum + Number(o.total || 0),0);
   const diamonds = doneOrders.reduce((sum,o)=>sum + Number(o.diamantes || 0),0);
   const clients = new Set(orders.map(o => String(o.jugador_id || '').trim()).filter(Boolean)).size;
@@ -514,7 +544,39 @@ function updateStats(orders){
   document.getElementById('statSales').textContent = money(sales);
   document.getElementById('statDiamonds').textContent = diamonds.toLocaleString('es-CO');
   document.getElementById('statClients').textContent = clients.toLocaleString('es-CO');
+
+  document.getElementById('countNew').textContent = waiting;
+  document.getElementById('countProcess').textContent = process;
+  document.getElementById('countDone').textContent = doneOrders.length;
+  document.getElementById('countCancelled').textContent = rejected;
+  document.getElementById('countOld').textContent = orders.filter(isOldOrder).length;
+  document.getElementById('countAll').textContent = orders.length;
+
   renderSalesChart(doneOrders);
+}
+
+function isOldOrder(order){
+  const d = normalizeDate(order.created_at);
+  if(!d) return false;
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+  return d < sevenDaysAgo;
+}
+
+function matchesOrderView(order){
+  const status = order.estado || 'En espera de revisión del pago';
+  if(currentView === 'new') return status === 'En espera de revisión del pago';
+  if(currentView === 'process') return status === 'Pagado';
+  if(currentView === 'done') return status === 'Completado';
+  if(currentView === 'cancelled') return status === 'Rechazado';
+  if(currentView === 'old') return isOldOrder(order);
+  return true;
+}
+
+function updateActiveTab(){
+  document.querySelectorAll('.order-tab').forEach(btn=>{
+    btn.classList.toggle('active', btn.dataset.view === currentView);
+  });
 }
 
 function renderSalesChart(orders){
@@ -556,12 +618,13 @@ function renderOrders(){
 
     const matchesSearch = !search || text.includes(search);
     const matchesStatus = !filter || o.estado === filter;
+    const matchesView = matchesOrderView(o);
     const orderDate = normalizeDate(o.created_at);
     const matchesDate = !dateFilter || (orderDate && (()=>{
       const [y,m,d] = dateFilter.split('-').map(Number);
       return orderDate.getFullYear()===y && orderDate.getMonth()+1===m && orderDate.getDate()===d;
     })());
-    return matchesSearch && matchesStatus && matchesDate;
+    return matchesSearch && matchesStatus && matchesDate && matchesView;
   });
 
   const body = document.getElementById('ordersBody');
@@ -650,10 +713,10 @@ function openOrder(id){
     <div class="comprobante-box">
       <b>🧾 Comprobante de pago</b><br>
       ${order.comprobante_url
-        ? 'El comprobante está guardado de forma privada en Supabase. Puedes abrirlo desde aquí.'
+        ? 'El comprobante está guardado de forma privada en Supabase.'
         : 'Este pedido no tiene un comprobante guardado. Verifica el comprobante recibido por WhatsApp.'}
       ${order.comprobante_url
-        ? `<div style="margin-top:10px"><button class="btn blue" type="button" onclick="viewComprobante(${Number(order.id)})">👁️ Ver comprobante</button></div>`
+        ? `<div style="margin-top:10px"><button class="btn blue" type="button" onclick="viewComprobante(${Number(order.id)})">👁️ Mostrar comprobante</button></div><div id="receiptPreview" class="receipt-preview hidden"></div>`
         : ''}
     </div>
   `;
@@ -671,10 +734,14 @@ function openOrder(id){
 
 async function viewComprobante(id){
   const order = getOrder(id);
-  if(!order || !order.comprobante_url){
+  const preview = document.getElementById('receiptPreview');
+  if(!order || !order.comprobante_url || !preview){
     alert('Este pedido no tiene un comprobante guardado.');
     return;
   }
+
+  preview.classList.remove('hidden');
+  preview.innerHTML = '<div class="receipt-loading">⏳ Cargando comprobante...</div>';
 
   try{
     const {data,error} = await supabaseClient.storage
@@ -685,10 +752,15 @@ async function viewComprobante(id){
       throw new Error(error?.message || 'No se pudo generar el enlace seguro.');
     }
 
-    window.open(data.signedUrl, '_blank', 'noopener,noreferrer');
+    const safeUrl = String(data.signedUrl).replaceAll('"','&quot;');
+    preview.innerHTML = `
+      <img src="${safeUrl}" alt="Comprobante de pago del pedido #${Number(order.id)}" onerror="this.outerHTML='<div class=\'receipt-loading\'>❌ No se pudo cargar la imagen.</div>'">
+      <div class="receipt-actions">
+        <button class="btn blue" type="button" onclick="window.open('${safeUrl}','_blank','noopener,noreferrer')">↗️ Abrir grande</button>
+      </div>`;
   }catch(error){
-    console.error('Error al abrir comprobante:', error);
-    alert('❌ No se pudo abrir el comprobante: ' + (error.message || 'error desconocido'));
+    console.error('Error al mostrar comprobante:', error);
+    preview.innerHTML = '<div class="receipt-loading">❌ No se pudo cargar el comprobante.</div>';
   }
 }
 
@@ -744,6 +816,14 @@ function escapeHtml(value){
     .replaceAll('"','&quot;')
     .replaceAll("'","&#039;");
 }
+
+document.querySelectorAll('.order-tab').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    currentView = btn.dataset.view || 'new';
+    updateActiveTab();
+    renderOrders();
+  });
+});
 
 document.getElementById('refreshBtn').addEventListener('click',loadOrders);
 document.getElementById('searchInput').addEventListener('input',renderOrders);
