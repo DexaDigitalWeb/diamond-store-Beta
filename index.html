@@ -568,7 +568,7 @@ footer p{margin-top:10px;color:var(--muted);font-size:.95rem;line-height:1.6}
         <h3>🎟️ CANJEAR CÓDIGO</h3>
         <p class="redeem-note">Cuando cumplas una promoción, nosotros verificaremos tus recargas y te entregaremos un código de canjeo.</p>
         <div class="redeem-row">
-            <input id="redeemCode" class="redeem-input" type="text" maxlength="32" placeholder="Ej: DS100-A7K2P9">
+            <input id="redeemCode" class="redeem-input" type="text" maxlength="32" placeholder="Ej: DEXA-A7K2-P9Q4">
             <button class="redeem-btn" onclick="redeemCode()">CANJEAR CÓDIGO</button>
         </div>
         <div id="redeemStatus" class="redeem-status"></div>
@@ -1136,68 +1136,71 @@ function registerAccumulativeOrder(playerId){
 }
 
 /* =========================================================
-   CÓDIGOS DE CANJE
-   Agrega aquí los códigos que entregues a tus clientes.
+   CÓDIGOS DE CANJE DINÁMICOS
+   Los códigos se validan directamente en Supabase.
 ========================================================= */
-const VALID_REDEEM_CODES = {
-    "DS100-A7K2P9":{rewardDiamonds:300,sourceDiamonds:100,target:10,label:"300 DIAMANTES EXTRA"},
-    "DS100-B4M8Q2":{rewardDiamonds:300,sourceDiamonds:100,target:10,label:"300 DIAMANTES EXTRA"},
-    "DS100-C9R3X7":{rewardDiamonds:300,sourceDiamonds:100,target:10,label:"300 DIAMANTES EXTRA"},
-    "DS100-D5T1N8":{rewardDiamonds:300,sourceDiamonds:100,target:10,label:"300 DIAMANTES EXTRA"},
-    "DS100-E2V6L4":{rewardDiamonds:300,sourceDiamonds:100,target:10,label:"300 DIAMANTES EXTRA"},
-    "DS100-F8J5W3":{rewardDiamonds:300,sourceDiamonds:100,target:10,label:"300 DIAMANTES EXTRA"},
-    "DS100-G3P9Z6":{rewardDiamonds:300,sourceDiamonds:100,target:10,label:"300 DIAMANTES EXTRA"},
-    "DS100-H6Q2Y5":{rewardDiamonds:300,sourceDiamonds:100,target:10,label:"300 DIAMANTES EXTRA"},
-    "DS100-J1K7M4":{rewardDiamonds:300,sourceDiamonds:100,target:10,label:"300 DIAMANTES EXTRA"},
-    "DS100-L5N8R2":{rewardDiamonds:300,sourceDiamonds:100,target:10,label:"300 DIAMANTES EXTRA"},
-    "DS1000-A8F3K7":{rewardDiamonds:500,sourceDiamonds:1000,target:6,label:"500 DIAMANTES EXTRA"},
-    "DS1000-B2M9Q5":{rewardDiamonds:500,sourceDiamonds:1000,target:6,label:"500 DIAMANTES EXTRA"},
-    "DS1000-C7R4X1":{rewardDiamonds:500,sourceDiamonds:1000,target:6,label:"500 DIAMANTES EXTRA"},
-    "DS1000-D6T8N3":{rewardDiamonds:500,sourceDiamonds:1000,target:6,label:"500 DIAMANTES EXTRA"},
-    "DS1000-E9V2L6":{rewardDiamonds:500,sourceDiamonds:1000,target:6,label:"500 DIAMANTES EXTRA"},
-    "DS1000-F4J7W8":{rewardDiamonds:500,sourceDiamonds:1000,target:6,label:"500 DIAMANTES EXTRA"},
-    "DS1000-G5P1Z9":{rewardDiamonds:500,sourceDiamonds:1000,target:6,label:"500 DIAMANTES EXTRA"},
-    "DS1000-H3Q6Y2":{rewardDiamonds:500,sourceDiamonds:1000,target:6,label:"500 DIAMANTES EXTRA"},
-    "DS1000-J8K4M5":{rewardDiamonds:500,sourceDiamonds:1000,target:6,label:"500 DIAMANTES EXTRA"},
-    "DS1000-L2N7R4":{rewardDiamonds:500,sourceDiamonds:1000,target:6,label:"500 DIAMANTES EXTRA"},
-    "DS5000-A3K8P6":{rewardDiamonds:1000,sourceDiamonds:5000,target:5,label:"1.000 DIAMANTES EXTRA"},
-    "DS5000-B7M2Q9":{rewardDiamonds:1000,sourceDiamonds:5000,target:5,label:"1.000 DIAMANTES EXTRA"},
-    "DS5000-C4R6X1":{rewardDiamonds:1000,sourceDiamonds:5000,target:5,label:"1.000 DIAMANTES EXTRA"},
-    "DS5000-D9T3N7":{rewardDiamonds:1000,sourceDiamonds:5000,target:5,label:"1.000 DIAMANTES EXTRA"},
-    "DS5000-E5V8L2":{rewardDiamonds:1000,sourceDiamonds:5000,target:5,label:"1.000 DIAMANTES EXTRA"},
-    "DS5000-F1J4W9":{rewardDiamonds:1000,sourceDiamonds:5000,target:5,label:"1.000 DIAMANTES EXTRA"},
-    "DS5000-G6P2Z8":{rewardDiamonds:1000,sourceDiamonds:5000,target:5,label:"1.000 DIAMANTES EXTRA"},
-    "DS5000-H8Q5Y3":{rewardDiamonds:1000,sourceDiamonds:5000,target:5,label:"1.000 DIAMANTES EXTRA"},
-    "DS5000-J2K9M6":{rewardDiamonds:1000,sourceDiamonds:5000,target:5,label:"1.000 DIAMANTES EXTRA"},
-    "DS5000-L7N1R5":{rewardDiamonds:1000,sourceDiamonds:5000,target:5,label:"1.000 DIAMANTES EXTRA"}
-};
-
-function redeemCode(){
+async function redeemCode(){
     const input = document.getElementById('redeemCode');
     const status = document.getElementById('redeemStatus');
+    const playerInput = document.getElementById('playerId');
     const code = input.value.trim().toUpperCase();
+    const playerId = playerInput ? playerInput.value.trim() : '';
 
-    if(!code){ status.textContent = '⚠️ Escribe tu código de canjeo.'; status.style.color = 'var(--gold)'; return; }
-
-    const redeemed = getRedeemedCodes();
-    if(redeemed.includes(code)){
-        status.textContent = '⚠️ Este código ya fue enviado para canje en este dispositivo.';
+    if(!code){
+        status.textContent = '⚠️ Escribe tu código de canjeo.';
         status.style.color = 'var(--gold)';
         return;
     }
 
-    const reward = VALID_REDEEM_CODES[code];
-    if(!reward){
-        status.textContent = '❌ Código no válido. Verifica el código que te entregó DIAMOND STORE.';
-        status.style.color = 'var(--red)';
+    if(!playerId){
+        status.textContent = '⚠️ Primero ingresa tu ID de jugador.';
+        status.style.color = 'var(--gold)';
+        if(playerInput) playerInput.focus();
         return;
     }
 
-    const rewardText = reward.rewardDiamonds.toLocaleString('es-CO');
-    const sourceText = reward.sourceDiamonds.toLocaleString('es-CO');
-    const targetText = reward.target.toLocaleString('es-CO');
+    if(playerId.length < 4){
+        status.textContent = '⚠️ Revisa tu ID de jugador.';
+        status.style.color = 'var(--gold)';
+        return;
+    }
 
-    const message = `💎✨ *CANJE DE RECOMPENSA - DIAMOND STORE* ✨💎
+    status.textContent = '⏳ Verificando código y jugador...';
+    status.style.color = 'var(--cyan)';
+
+    try{
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/canear_premio`, {
+            method: 'POST',
+            headers: {
+                'apikey': SUPABASE_KEY,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                p_codigo: code,
+                p_jugador_id: playerId
+            })
+        });
+
+        const result = await response.json().catch(()=>[]);
+
+        if(!response.ok){
+            console.error('Error RPC canear_premio:', result);
+            status.textContent = '❌ No se pudo verificar el código. Inténtalo nuevamente.';
+            status.style.color = 'var(--red)';
+            return;
+        }
+
+        if(!Array.isArray(result) || result.length === 0){
+            status.textContent = '❌ Código no válido, ya canjeado o no corresponde a este ID de jugador.';
+            status.style.color = 'var(--red)';
+            return;
+        }
+
+        const reward = result[0];
+        const rewardText = Number(reward.premio_diamantes).toLocaleString('es-CO');
+        const promoText = reward.tipo_premio || 'Recompensa acumulativa';
+
+        const message = `💎✨ *CANJE DE RECOMPENSA - DIAMOND STORE* ✨💎
 
 👋 ¡Hola ${selectedContact.name}!
 
@@ -1206,33 +1209,36 @@ Quiero canjear una recompensa de mi promoción acumulativa.
 ━━━━━━━━━━━━━━━
 
 🎟️ *CÓDIGO DE CANJE:*
-${code}
+${reward.codigo}
+
+🆔 *ID DE JUGADOR:*
+${playerId}
 
 🎁 *RECOMPENSA:*
 ${rewardText} diamantes
 
-💎 *RECARGAS REALIZADAS:*
-${targetText} recargas de ${sourceText} diamantes
-
 🏆 *PROMOCIÓN:*
-${reward.label}
+${promoText}
 
 📸 *COMPROBANTE:*
 Adjuntaré el comprobante correspondiente para verificar el canje.
 
-🙏 Por favor, verifiquen mi código y procesen mi recompensa.
+🙏 Por favor, procesen mi recompensa.
 
 🎮💎 *DIAMOND STORE*`;
 
-    const url = 'https://wa.me/'+selectedContact.phone+'?text='+encodeURIComponent(message);
+        const url = 'https://wa.me/'+selectedContact.phone+'?text='+encodeURIComponent(message);
 
-    redeemed.push(code);
-    localStorage.setItem(REDEEM_KEY, JSON.stringify(redeemed.slice(-100)));
+        status.textContent = `✅ Código válido. Recompensa: ${rewardText} diamantes. Abriendo WhatsApp...`;
+        status.style.color = 'var(--green)';
+        input.value = '';
 
-    status.textContent = '✅ Código válido. Abriendo WhatsApp para solicitar el canje...';
-    status.style.color = 'var(--green)';
-
-    try{ window.open(url,'_blank'); }catch(e){ window.location.href = url; }
+        try{ window.open(url,'_blank'); }catch(e){ window.location.href = url; }
+    }catch(error){
+        console.error('Error al canjear:', error);
+        status.textContent = '❌ Error de conexión. Revisa tu internet e inténtalo nuevamente.';
+        status.style.color = 'var(--red)';
+    }
 }
 
 /* =========================================================
