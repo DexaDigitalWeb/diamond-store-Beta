@@ -103,12 +103,6 @@ td{font-size:14px}
 tr:last-child td{border-bottom:0}
 .player{font-weight:800;color:var(--cyan)}
 .small{font-size:12px;color:var(--muted);margin-top:4px}
-
-.accum-progress{min-width:145px;display:grid;gap:4px}
-.accum-line{display:flex;justify-content:space-between;gap:8px;font-size:11px;color:var(--muted)}
-.accum-line b{color:var(--text);font-weight:800}
-.accum-line b.ready{color:var(--green)}
-.accum-ready{margin-top:3px;color:var(--yellow);font-size:11px;font-weight:800}
 .money{font-weight:800}
 .badge{
   display:inline-block;padding:6px 9px;border-radius:999px;font-size:11px;font-weight:800
@@ -362,7 +356,7 @@ tr:last-child td{border-bottom:0}
           <th>Paquete</th>
           <th>Total</th>
           <th>Pago</th>
-          <th>Progreso acumulativo</th>
+          <th>Acumulativa</th>
           <th>Estado</th>
           <th>Gestionar</th>
         </tr>
@@ -393,11 +387,12 @@ tr:last-child td{border-bottom:0}
       <div class="field">
         <label for="prizeType">Premio acumulativo</label>
         <select id="prizeType">
-          <option value="300|10 × 100">+300 💎 — 10 × 100 💎</option>
-          <option value="500|6 × 1.000">+500 💎 — 6 × 1.000 💎</option>
-          <option value="1000|5 × 5.000">+1.000 💎 — 5 × 5.000 💎</option>
+          <option value="300|10 × 100|100">+300 💎 — 10 × 100 💎</option>
+          <option value="500|6 × 1.000|1000">+500 💎 — 6 × 1.000 💎</option>
+          <option value="1000|5 × 5.000|5000">+1.000 💎 — 5 × 5.000 💎</option>
         </select>
       </div>
+      <div id="prizeProgress" class="notice">Escribe el ID para consultar el progreso real.</div>
       <div class="modal-actions">
         <button class="btn yellow" id="generatePrizeBtn" type="button">🎟️ Generar código</button>
         <button class="btn" id="cancelPrizeBtn" type="button">Cancelar</button>
@@ -636,9 +631,79 @@ function closePrizeModal(){
   document.getElementById('prizeModal').classList.add('hidden');
 }
 
+async function updatePrizeProgress(){
+  const playerId = document.getElementById('prizePlayerId').value.trim();
+  const [rewardText,typeText,targetText] = document.getElementById('prizeType').value.split('|');
+  const target = Number(targetText);
+  const reward = Number(rewardText);
+  const box = document.getElementById('prizeProgress');
+  const btn = document.getElementById('generatePrizeBtn');
+
+  btn.disabled = true;
+  if(!playerId){
+    box.className = 'notice';
+    box.textContent = 'Escribe el ID para consultar el progreso real.';
+    return;
+  }
+
+  box.className = 'notice';
+  box.textContent = '⏳ Consultando progreso real...';
+
+  try{
+    const {count:completed,error:ordersError} = await supabaseClient
+      .from(TABLE)
+      .select('id',{count:'exact',head:true})
+      .eq('jugador_id',playerId)
+      .eq('estado','Completado')
+      .eq('recarga_acumulativa',true)
+      .eq('diamantes',target);
+
+    if(ordersError) throw new Error(ordersError.message);
+
+    const typeLabel = typeText;
+    const {count:awarded,error:prizesError} = await supabaseClient
+      .from('premios_acumulativos')
+      .select('id',{count:'exact',head:true})
+      .eq('jugador_id',playerId)
+      .eq('tipo_premio',typeLabel)
+      .in('estado',['disponible','canjeado']);
+
+    if(prizesError) throw new Error(prizesError.message);
+
+    const done = Number(completed || 0);
+    const alreadyAwarded = Number(awarded || 0);
+    const cycles = Math.floor(done / (target === 100 ? 10 : target === 1000 ? 6 : 5));
+    const progress = done % (target === 100 ? 10 : target === 1000 ? 6 : 5);
+    const goal = target === 100 ? 10 : target === 1000 ? 6 : 5;
+    const available = cycles > alreadyAwarded;
+
+    box.className = available ? 'notice success' : 'notice';
+    box.innerHTML = `🔥 <b>${progress}/${goal}</b> recargas de ${target.toLocaleString('es-CO')} 💎<br>
+      Total completadas: <b>${done}</b> · Premios ya generados: <b>${alreadyAwarded}</b><br>
+      ${available ? `✅ Premio disponible: <b>+${reward.toLocaleString('es-CO')} 💎</b>` : `⏳ Aún no hay un nuevo premio de +${reward.toLocaleString('es-CO')} 💎 disponible.`}`;
+    btn.disabled = !available;
+  }catch(error){
+    console.error(error);
+    box.className = 'notice';
+    box.textContent = '❌ No se pudo consultar el progreso: ' + error.message;
+    btn.disabled = true;
+  }
+}
+
+function openPrizeModal(){
+  document.getElementById('prizePlayerId').value = '';
+  document.getElementById('prizeType').value = '300|10 × 100|100';
+  document.getElementById('generatedPrize').classList.add('hidden');
+  document.getElementById('generatedPrize').textContent = '';
+  document.getElementById('prizeProgress').className = 'notice';
+  document.getElementById('prizeProgress').textContent = 'Escribe el ID para consultar el progreso real.';
+  document.getElementById('generatePrizeBtn').disabled = true;
+  document.getElementById('prizeModal').classList.remove('hidden');
+}
+
 async function generatePrize(){
   const playerId = document.getElementById('prizePlayerId').value.trim();
-  const [rewardText,typeText] = document.getElementById('prizeType').value.split('|');
+  const [rewardText,typeText,targetText] = document.getElementById('prizeType').value.split('|');
   const reward = Number(rewardText);
   const btn = document.getElementById('generatePrizeBtn');
   const box = document.getElementById('generatedPrize');
@@ -652,39 +717,30 @@ async function generatePrize(){
   btn.textContent = '⏳ Generando...';
 
   try{
-    const {data:code,error:rpcError} = await supabaseClient.rpc('generar_codigo_premio');
+    const {data,error} = await supabaseClient.rpc('generar_premio_acumulativo',{
+      p_jugador_id: playerId,
+      p_tipo: targetText
+    });
 
-    if(rpcError || !code){
-      throw new Error(rpcError?.message || 'No se pudo generar el código.');
+    if(error || !data?.length){
+      throw new Error(error?.message || 'El jugador todavía no tiene un premio disponible para este nivel.');
     }
 
-    const {data,error:insertError} = await supabaseClient
-      .from('premios_acumulativos')
-      .insert({
-        codigo:String(code),
-        jugador_id:playerId,
-        premio_diamantes:reward,
-        tipo_premio:typeText,
-        estado:'disponible'
-      })
-      .select('id,codigo,jugador_id,premio_diamantes,tipo_premio,estado,creado_en')
-      .single();
-
-    if(insertError) throw new Error(insertError.message);
-
+    const prize = data[0];
     box.classList.remove('hidden');
     box.innerHTML = `✅ <b>Código generado correctamente</b><br><br>
-      🎟️ <b style="font-size:18px;color:var(--yellow);letter-spacing:1px">${escapeHtml(data.codigo)}</b><br>
-      🆔 Jugador: <b>${escapeHtml(data.jugador_id)}</b><br>
-      💎 Premio: <b>+${Number(data.premio_diamantes).toLocaleString('es-CO')} diamantes</b><br><br>
-      <button class="btn blue" type="button" onclick="copyText('${escapeHtml(data.codigo)}')">📋 Copiar código</button>`;
+      🎟️ <b style="font-size:18px;color:var(--yellow);letter-spacing:1px">${escapeHtml(prize.codigo)}</b><br>
+      🆔 Jugador: <b>${escapeHtml(prize.jugador_id)}</b><br>
+      💎 Premio: <b>+${Number(prize.premio_diamantes).toLocaleString('es-CO')} diamantes</b><br><br>
+      <button class="btn blue" type="button" onclick="copyText('${escapeHtml(prize.codigo)}')">📋 Copiar código</button>`;
 
     await loadPrizes();
+    await updatePrizeProgress();
   }catch(error){
     console.error(error);
     alert('❌ No se pudo generar el premio:\n' + error.message);
+    await updatePrizeProgress();
   }finally{
-    btn.disabled = false;
     btn.textContent = '🎟️ Generar código';
   }
 }
@@ -780,45 +836,6 @@ function renderSalesChart(orders){
   }).join('');
 }
 
-function getAccumProgress(playerId){
-  const id = String(playerId || '').trim();
-  const completed = allOrders.filter(o =>
-    String(o.jugador_id || '').trim() === id &&
-    o.estado === 'Completado' &&
-    o.recarga_acumulativa === true
-  );
-
-  const count100 = completed.filter(o => Number(o.diamantes) === 100).length;
-  const count1000 = completed.filter(o => Number(o.diamantes) === 1000).length;
-  const count5000 = completed.filter(o => Number(o.diamantes) === 5000).length;
-
-  return {
-    p100: Math.min(count100, 10),
-    p1000: Math.min(count1000, 6),
-    p5000: Math.min(count5000, 5),
-    raw100: count100,
-    raw1000: count1000,
-    raw5000: count5000
-  };
-}
-
-function accumProgressHtml(playerId){
-  const p = getAccumProgress(playerId);
-  const hasAny = p.raw100 || p.raw1000 || p.raw5000;
-  if(!hasAny) return '<span class="small">Sin recargas acumulativas</span>';
-
-  const ready100 = p.raw100 >= 10;
-  const ready1000 = p.raw1000 >= 6;
-  const ready5000 = p.raw5000 >= 5;
-
-  return `<div class="accum-progress">
-    <div class="accum-line"><span>100 💎</span><b class="${ready100 ? 'ready' : ''}">${p.p100}/10</b></div>
-    <div class="accum-line"><span>1.000 💎</span><b class="${ready1000 ? 'ready' : ''}">${p.p1000}/6</b></div>
-    <div class="accum-line"><span>5.000 💎</span><b class="${ready5000 ? 'ready' : ''}">${p.p5000}/5</b></div>
-    ${ready100 || ready1000 || ready5000 ? '<div class="accum-ready">🎁 Premio disponible</div>' : ''}
-  </div>`;
-}
-
 function renderOrders(){
   const search = document.getElementById('searchInput').value.trim().toLowerCase();
   const filter = document.getElementById('statusFilter').value;
@@ -876,7 +893,7 @@ function renderOrders(){
       </td>
       <td><span class="money">${money(order.total)}</span></td>
       <td>${escapeHtml(order.metodo_pago || 'No indicado')}</td>
-      <td>${accumProgressHtml(order.jugador_id)}</td>
+      <td>${order.recarga_acumulativa ? '🔥 Sí' : '—'}</td>
       <td><span class="badge ${statusClass(status)}">${escapeHtml(status)}</span></td>
       <td>
         <div class="row-actions">
@@ -1042,6 +1059,8 @@ document.getElementById('openPrizeBtn').addEventListener('click',openPrizeModal)
 document.getElementById('closePrizeModal').addEventListener('click',closePrizeModal);
 document.getElementById('cancelPrizeBtn').addEventListener('click',closePrizeModal);
 document.getElementById('generatePrizeBtn').addEventListener('click',generatePrize);
+document.getElementById('prizePlayerId').addEventListener('input',updatePrizeProgress);
+document.getElementById('prizeType').addEventListener('change',updatePrizeProgress);
 document.getElementById('prizeModal').addEventListener('click',(e)=>{
   if(e.target.id === 'prizeModal') closePrizeModal();
 });
