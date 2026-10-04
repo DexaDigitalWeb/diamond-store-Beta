@@ -745,6 +745,35 @@ let currentPackage = null;
 let selectedContact = {name:'William', phone:'573001805830'};
 
 /* =========================================================
+   SUPABASE
+   Solo usamos la clave pública (publishable) en el navegador.
+   NUNCA pongas aquí una service_role/secret key.
+========================================================= */
+const SUPABASE_URL = 'https://tpqezzgxtuibqhcigvif.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_L57gawUrnRbPiHyqYzujYA_c2QeNFK4';
+const SUPABASE_TABLE = 'DexaDigital';
+
+async function saveOrderToSupabase(order){
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_TABLE}`, {
+        method: 'POST',
+        headers: {
+            'apikey': SUPABASE_KEY,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify(order)
+    });
+
+    if(!response.ok){
+        const errorText = await response.text();
+        throw new Error(`Supabase ${response.status}: ${errorText}`);
+    }
+
+    return true;
+}
+
+
+/* =========================================================
    TOAST
 ========================================================= */
 let toastTimer = null;
@@ -1151,7 +1180,7 @@ Adjuntaré el comprobante correspondiente para verificar el canje.
 /* =========================================================
    PROCESS ORDER
 ========================================================= */
-function processOrder(){
+async function processOrder(){
     const playerId = document.getElementById('playerId').value.trim();
     const paid = document.getElementById('paymentCheck').checked;
     const activateAccum = document.getElementById('activateAccum').checked;
@@ -1159,17 +1188,52 @@ function processOrder(){
     if(!playerId){ toast('⚠️ Primero ingresa tu ID de jugador.'); return; }
     if(playerId.length < 4){ toast('⚠️ Revisa tu ID de jugador.'); return; }
     if(!paid){ toast('💳 Debes realizar el pago por Nequi y marcar la casilla de confirmación.'); return; }
+    if(!currentPackage){ toast('⚠️ No se encontró el paquete seleccionado.'); return; }
 
-    const diamonds = currentPackage.diamonds.toLocaleString('es-CO');
-    const price = currentPackage.price.toLocaleString('es-CO');
+    const diamondsNumber = currentPackage.diamonds;
+    const priceNumber = currentPackage.price;
+    const diamonds = diamondsNumber.toLocaleString('es-CO');
+    const price = priceNumber.toLocaleString('es-CO');
     const saving = currentPackage.saving > 0 ? currentPackage.saving.toLocaleString('es-CO') : 'No aplica';
 
+    /* Primero guardamos el pedido en Supabase. Si falla, no abrimos WhatsApp. */
+    const order = {
+        jugador_id: playerId,
+        diamantes: diamondsNumber,
+        total: priceNumber,
+        paquete: `${diamondsNumber.toLocaleString('es-CO')} Diamantes`,
+        metodo_pago: 'Nequi',
+        personaje: selectedContact.name,
+        recarga_acumulativa: activateAccum,
+        estado: 'En espera de revisión del pago'
+    };
+
+    const button = document.querySelector('#orderForm .modal-btn');
+    const originalButtonText = button ? button.textContent : '';
+    if(button){
+        button.disabled = true;
+        button.textContent = '⏳ GUARDANDO PEDIDO...';
+    }
+
+    try{
+        await saveOrderToSupabase(order);
+    }catch(error){
+        console.error('Error al guardar pedido en Supabase:', error);
+        toast('❌ No se pudo guardar el pedido. Revisa la conexión con Supabase.');
+        if(button){
+            button.disabled = false;
+            button.textContent = originalButtonText;
+        }
+        return;
+    }
+
+    /* Solo después de guardar correctamente registramos la acumulativa local. */
     let accumResult = null;
     if(activateAccum) accumResult = registerAccumulativeOrder(playerId);
 
-    const accumPromo = accumPromos[currentPackage.diamonds];
-    const accumMessage = activateAccum && accumPromo
-        ? `\n\n🔥 *RECARGA ACUMULATIVA ACTIVADA*\n💎 Esta compra suma: 1 recarga de ${currentPackage.diamonds.toLocaleString('es-CO')} diamantes\n📊 Progreso: ${accumResult.after} / ${accumResult.target}\n🎁 Premio al completar: ${accumPromo.reward}\n${accumResult.completed ? '🏆 *PROMOCIÓN COMPLETADA: VERIFICAR Y ENTREGAR CÓDIGO DE CANJEO.*' : '⏳ Aún no completa la cantidad mínima requerida.'}`
+    const accumPromo = accumPromos[diamondsNumber];
+    const accumMessage = activateAccum && accumPromo && accumResult
+        ? `\n\n🔥 *RECARGA ACUMULATIVA ACTIVADA*\n💎 Esta compra suma: 1 recarga de ${diamondsNumber.toLocaleString('es-CO')} diamantes\n📊 Progreso: ${accumResult.after} / ${accumResult.target}\n🎁 Premio al completar: ${accumPromo.reward}\n${accumResult.completed ? '🏆 *PROMOCIÓN COMPLETADA: VERIFICAR Y ENTREGAR CÓDIGO DE CANJEO.*' : '⏳ Aún no completa la cantidad mínima requerida.'}`
         : '';
 
     const message =
@@ -1216,6 +1280,7 @@ En espera de revisión del pago.
     document.getElementById('orderForm').style.display = 'none';
     document.getElementById('successScreen').style.display = 'block';
 }
+
 
 /* =========================================================
    CONTACT WHATSAPP / EMAIL
