@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#05070f">
+<title>Diamond Store | Comentarios</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 8 88 36 50 92 12 36Z' fill='%2300e5ff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#05070f;--panel:rgba(13,19,38,.8);--line:rgba(148,180,255,.14);--cyan:#00e5ff;--violet:#7c3aed;--gold:#fbbf24;--green:#22c55e;--red:#ef4444;--text:#eef4ff;--muted:#93a3c4;--d:'Orbitron',sans-serif;--b:'Rajdhani',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{min-height:100vh;color:var(--text);font-family:var(--b);font-size:17px;background:radial-gradient(800px 500px at 10% 0,rgba(124,58,237,.18),transparent 60%),radial-gradient(800px 500px at 90% 10%,rgba(0,229,255,.11),transparent 60%),var(--bg);overflow-x:hidden}
+body:after{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);background-size:44px 44px;z-index:0}
+nav{position:sticky;top:0;z-index:20;background:rgba(5,8,18,.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.nav{max-width:1100px;height:68px;margin:auto;padding:0 20px;display:flex;align-items:center;justify-content:space-between}.logo{color:#fff;text-decoration:none;font:800 .9rem var(--d);letter-spacing:2px;display:flex;gap:10px;align-items:center}.dia{width:26px;height:26px;clip-path:polygon(50% 0,100% 32%,50% 100%,0 32%);background:linear-gradient(135deg,var(--cyan),var(--violet));box-shadow:0 0 18px #00e5ff}.links{display:flex;gap:8px}.links a{color:var(--muted);text-decoration:none;padding:9px 13px;border-radius:9px;font-weight:700}.links a:hover{color:var(--cyan);background:#00e5ff10}
+main{max-width:1100px;margin:auto;padding:0 20px 70px;position:relative;z-index:1}.hero{text-align:center;padding:75px 10px 48px}.badge{display:inline-flex;gap:8px;align-items:center;border:1px solid #00e5ff40;background:#00e5ff0d;color:var(--cyan);border-radius:30px;padding:8px 17px;font:800 .7rem var(--d);letter-spacing:2px}.dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green)}h1{margin-top:23px;font:900 clamp(2rem,6vw,4rem)/1.15 var(--d)}h1 span{color:var(--cyan);text-shadow:0 0 25px #00e5ff70}.hero p{max-width:650px;margin:19px auto;color:var(--muted);line-height:1.6;font-size:1.12rem}
+.stats{max-width:760px;margin:35px auto 0;display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#ffffff05}.stat{text-align:center;padding:20px 10px}.stat+.stat{border-left:1px solid var(--line)}.stat strong{display:block;color:var(--cyan);font:800 1.35rem var(--d)}.stat small{color:var(--muted)}
+.grid{display:grid;grid-template-columns:370px 1fr;gap:22px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:24px;backdrop-filter:blur(12px);box-shadow:0 18px 45px -25px #000}.panel h2{font:700 1rem var(--d);letter-spacing:1.4px;color:var(--cyan);margin-bottom:8px}.desc{color:var(--muted);line-height:1.5;margin-bottom:18px}
+label{display:block;color:#cbd7ef;font-weight:700;margin:14px 0 7px}input,textarea,select{width:100%;background:#060b18;color:#fff;border:1px solid #00e5ff30;border-radius:11px;padding:13px;font:inherit;outline:none}input:focus,textarea:focus,select:focus{border-color:var(--cyan);box-shadow:0 0 14px #00e5ff20}textarea{min-height:125px;resize:vertical}.count{text-align:right;color:var(--muted);font-size:.82rem;margin-top:4px}
+.stars{display:flex;gap:4px}.star{border:0;background:none;color:#35425e;font-size:2rem;cursor:pointer;padding:0;line-height:1}.star.active,.star:hover{color:var(--gold);text-shadow:0 0 12px #fbbf2466}
+.check{display:flex;gap:9px;color:var(--muted);font-size:.9rem;line-height:1.4;margin:16px 0}.check input{width:17px;height:17px;accent-color:var(--cyan);margin-top:3px}.btn{width:100%;border:0;border-radius:12px;padding:15px;background:linear-gradient(135deg,var(--cyan),var(--violet));color:#fff;font:800 .8rem var(--d);letter-spacing:1px;cursor:pointer;transition:.2s}.btn:hover{transform:translateY(-2px);box-shadow:0 0 24px #00e5ff40}.btn:disabled{opacity:.5;transform:none}.notice{display:none;margin-top:13px;padding:12px;border-radius:10px;font-weight:700}.notice.show{display:block}.ok{color:#86efac;background:#22c55e12;border:1px solid #22c55e40}.err{color:#fca5a5;background:#ef444412;border:1px solid #ef444440}
+.tools{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:15px}.tools h2{margin:0}.tools select{width:auto;min-width:155px;padding:9px}.summary{display:flex;gap:12px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:14px;background:#00000020;margin-bottom:15px}.big{font:800 1.8rem var(--d);color:var(--gold)}.summary-stars{color:var(--gold);letter-spacing:2px}
+.list{display:flex;flex-direction:column;gap:12px}.review{padding:17px;border:1px solid var(--line);border-radius:14px;background:#050914b8}.top{display:flex;justify-content:space-between;gap:10px}.author{font-weight:800}.date{font-size:.8rem;color:var(--muted)}.review-stars{color:var(--gold);margin-top:4px}.text{color:#c7d2e8;line-height:1.55;margin-top:9px;white-space:pre-wrap;overflow-wrap:anywhere}.empty{text-align:center;color:var(--muted);padding:45px 15px;border:1px dashed #00e5ff30;border-radius:14px}.empty b{display:block;font-size:2.5rem;margin-bottom:8px}.more{margin-top:14px;background:#ffffff08;border:1px solid var(--line)}
+footer{position:relative;z-index:1;text-align:center;border-top:1px solid var(--line);padding:27px 20px;color:var(--muted)}footer strong{color:var(--cyan);font:800 .9rem var(--d);letter-spacing:2px}footer p{margin-top:7px;font-size:.9rem}
+@media(max-width:800px){.grid{grid-template-columns:1fr}.links{display:none}}@media(max-width:550px){.hero{padding-top:55px}.stats{grid-template-columns:1fr}.stat+.stat{border-left:0;border-top:1px solid var(--line)}.panel{padding:19px}.top{flex-direction:column}}
+</style>
+</head>
+<body>
+<nav><div class="nav"><a class="logo" href="index.html"><span class="dia"></span>DIAMOND STORE</a><div class="links"><a href="index.html">💎 Tienda</a><a href="#comentarios">💬 Comentarios</a></div></div></nav>
+<main>
+<section class="hero">
+<div class="badge"><span class="dot"></span> COMUNIDAD DIAMOND STORE</div>
+<h1>¿QUÉ OPINAS DE <span>NOSOTROS?</span></h1>
+<p>Comparte tu experiencia, deja una valoración y ayuda a otros jugadores a conocer la comunidad de Diamond Store.</p>
+<div class="stats"><div class="stat"><strong id="total">0</strong><small>Comentarios</small></div><div class="stat"><strong id="avg">—</strong><small>Valoración media</small></div><div class="stat"><strong>💎</strong><small>Comunidad</small></div></div>
+</section>
+
+<section id="comentarios" class="grid">
+<div class="panel">
+<h2>✍️ DEJA TU COMENTARIO</h2>
+<p class="desc">Escribe una opinión respetuosa. Los comentarios se revisan antes de aparecer públicamente.</p>
+<label for="name">👤 Nombre o nickname</label><input id="name" maxlength="30" placeholder="Ej: Wualter">
+<label>⭐ Tu valoración</label>
+<div class="stars" id="stars">
+<button class="star" data-v="1" type="button">★</button><button class="star" data-v="2" type="button">★</button><button class="star" data-v="3" type="button">★</button><button class="star" data-v="4" type="button">★</button><button class="star" data-v="5" type="button">★</button>
+</div>
+<label for="comment">💬 Comentario</label><textarea id="comment" maxlength="500" placeholder="Cuéntanos qué te pareció tu experiencia..."></textarea><div class="count"><span id="counter">0</span>/500</div>
+<label class="check"><input id="respect" type="checkbox"><span>Confirmo que mi comentario es respetuoso y no contiene información privada de otras personas.</span></label>
+<button class="btn" id="send" type="button">🚀 PUBLICAR COMENTARIO</button><div id="notice" class="notice"></div>
+</div>
+
+<div class="panel">
+<div class="tools"><h2>💬 OPINIONES DE LA COMUNIDAD</h2><select id="sort"><option value="new">Más recientes</option><option value="best">Mejor valorados</option></select></div>
+<div class="summary"><div class="big" id="big">—</div><div><div class="summary-stars" id="sumstars">☆☆☆☆☆</div><small style="color:var(--muted)">Valoración de la comunidad</small></div></div>
+<div class="list" id="list"><div class="empty"><b>⏳</b>Cargando comentarios...</div></div>
+<button class="btn more" id="more" style="display:none">VER MÁS COMENTARIOS</button>
+</div>
+</section>
+</main>
+<footer><strong>💎 DIAMOND STORE</strong><p>Recargas y atención para jugadores.</p><p>Esta página es independiente de Garena y Free Fire.</p></footer>
+
+<script>
+const URL='https://tpqezzgxtuibqhcigvif.supabase.co',KEY='sb_publishable_L57gawUrnRbPiHyqYzujYA_c2QeNFK4',TABLE='comentarios';
+let rating=0,page=0,sort='new';const size=10,$=x=>document.getElementById(x);
+document.querySelectorAll('.star').forEach(b=>b.onclick=()=>{rating=+b.dataset.v;document.querySelectorAll('.star').forEach(s=>s.classList.toggle('active',+s.dataset.v<=rating))});
+$('comment').oninput=()=>{$('counter').textContent=$('comment').value.length};
+$('sort').onchange=()=>{sort=$('sort').value;page=0;load(true)};
+$('more').onclick=()=>{page++;load(false)};
+function notice(t,c){$('notice').textContent=t;$('notice').className='notice show '+c}
+$('send').onclick=async()=>{
+ let name=$('name').value.trim(),comment=$('comment').value.trim();
+ if(name.length<2)return notice('⚠️ Escribe un nombre o nickname válido.','err');
+ if(!rating)return notice('⭐ Selecciona una valoración.','err');
+ if(comment.length<5)return notice('💬 Escribe un comentario un poco más completo.','err');
+ if(!$('respect').checked)return notice('⚠️ Acepta la norma de comentarios respetuosos.','err');
+ $('send').disabled=true;$('send').textContent='⏳ ENVIANDO...';
+ try{
+  let r=await fetch(URL+'/rest/v1/'+TABLE,{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({nombre:name,estrellas:rating,comentario:comment,aprobado:false})});
+  if(!r.ok)throw Error(await r.text());
+  $('name').value='';$('comment').value='';$('counter').textContent='0';$('respect').checked=false;rating=0;
+  document.querySelectorAll('.star').forEach(s=>s.classList.remove('active'));
+  notice('✅ Enviado. Aparecerá después de ser aprobado.','ok');
+ }catch(e){console.error(e);notice('❌ No se pudo enviar. Revisa la configuración de Supabase.','err')}
+ $('send').disabled=false;$('send').textContent='🚀 PUBLICAR COMENTARIO';
+};
+function add(x){
+ let d=x.creado_en?new Date(x.creado_en).toLocaleDateString('es-CO',{day:'2-digit',month:'short',year:'numeric'}):'',stars='★'.repeat(+x.estrellas)+'☆'.repeat(5-+x.estrellas),a=document.createElement('article');a.className='review';
+ a.innerHTML='<div class="top"><div><div class="author"></div><div class="review-stars">'+stars+'</div></div><div class="date"></div></div><div class="text"></div>';
+ a.querySelector('.author').textContent=x.nombre;a.querySelector('.date').textContent=d;a.querySelector('.text').textContent=x.comentario;$('list').appendChild(a)
+}
+async function summary(){
+ try{let r=await fetch(URL+'/rest/v1/'+TABLE+'?select=estrellas&aprobado=eq.true',{headers:{apikey:KEY}}),a=await r.json(),n=a.length,v=n?a.reduce((s,x)=>s+(+x.estrellas),0)/n:0;
+ $('total').textContent=n;$('avg').textContent=n?v.toFixed(1)+'/5':'—';$('big').textContent=n?v.toFixed(1):'—';let z=Math.round(v);$('sumstars').textContent='★'.repeat(z)+'☆'.repeat(5-z)}catch(e){}
+}
+async function load(reset){
+ if(reset)$('list').innerHTML='<div class="empty"><b>⏳</b>Cargando comentarios...</div>';
+ let from=page*size,url=URL+'/rest/v1/'+TABLE+'?select=id,nombre,estrellas,comentario,creado_en&aprobado=eq.true';
+ url+=sort==='best'?'&order=estrellas.desc,creado_en.desc':'&order=creado_en.desc';url+='&offset='+from+'&limit='+size;
+ try{
+  let r=await fetch(url,{headers:{apikey:KEY}});if(!r.ok)throw Error(await r.text());let data=await r.json();
+  if(reset)$('list').innerHTML='';
+  if(!data.length&&page===0){$('list').innerHTML='<div class="empty"><b>💎</b>Aún no hay comentarios publicados.<br>¡Sé el primero!</div>';$('more').style.display='none'}
+  else{data.forEach(add);$('more').style.display=data.length===size?'block':'none'}
+  summary();
+ }catch(e){console.error(e);if(reset)$('list').innerHTML='<div class="empty"><b>⚠️</b>No se pudieron cargar los comentarios.</div>'}
+}
+load(true);
+</script>
+</body>
+</html>
