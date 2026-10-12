@@ -1570,8 +1570,10 @@ function initReveal(){
 }
 
 
-/* DEXA BOT: respuestas automáticas locales (FAQ; no es una IA conectada) */
+/* DEXA BOT: conectado a la Edge Function de Supabase */
 (function initDiamondBot(){
+  const FUNCTION_URL='https://tpqezzgxtuibqhcigvif.supabase.co/functions/v1/swift-service';
+  const SUPABASE_PUBLISHABLE_KEY='sb_publishable_L57gawUrnRbPiHyqYzujYA_c2QeNFK4';
   const launcher=document.getElementById('botLauncher');
   const panel=document.getElementById('botPanel');
   const close=document.getElementById('botClose');
@@ -1580,21 +1582,41 @@ function initReveal(){
   const input=document.getElementById('botInput');
   if(!launcher||!panel||!messages||!form||!input) return;
   function toggle(open){panel.classList.toggle('open',open);launcher.setAttribute('aria-expanded',String(open));if(open) input.focus();}
-  function addMessage(text,who){const node=document.createElement('div');node.className='bot-msg '+who;node.textContent=text;messages.appendChild(node);messages.scrollTop=messages.scrollHeight;}
-  function answer(raw){const q=raw.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-    if(/precio|cuesta|paquete|diamante|valor/.test(q)) return '💎 Tenemos paquetes de 100, 300, 500, 1.000, 2.000 y 5.000 diamantes. Mira la sección “Diamantes” de esta página para ver los precios actualizados.';
-    if(/acumul|recompensa|premio|meta/.test(q)) return '🔥 Recarga acumulativa: activa la opción al hacer el pedido. Metas: 10 recargas de 100 diamantes = +300; 6 recargas de 1.000 = +500; 5 recargas de 5.000 = +1.000. Solo cuentan pedidos completados y confirmados, del mismo ID y con el paquete correspondiente. Los pendientes, rechazados o cancelados no cuentan.';
-    if(/compr|pedido|pagar|nequi|comprobante|recarga/.test(q)) return '📦 Elige un paquete, escribe tu ID de jugador, revisa los datos, realiza el pago por el método indicado en la página y adjunta el comprobante. El pedido debe revisarse y confirmarse. No compartas contraseñas.';
-    if(/codigo|canje/.test(q)) return '🎟️ Si ya tienes un código de premio, entra en la sección de canje de la página y sigue los pasos indicados. Si da error, contacta con el administrador.';
-    if(/persona|humano|admin|administrador|ayuda|contact/.test(q)) return '👤 Puedes contactar al equipo por WhatsApp en el número de atención que aparece en la página. También puedes unirte al grupo de la comunidad desde el botón “Grupo WhatsApp”.';
-    if(/hola|buenas|hey/.test(q)) return '¡Hola! 👋 Puedo ayudarte con precios, acumulativa, pedidos o códigos. Elige uno de los botones o escribe tu pregunta.';
-    return 'Gracias por escribir. Aún no tengo una respuesta automática para esa pregunta. Revisa la información de la página o contacta al administrador por WhatsApp para que te ayude.';
+  function addMessage(text,who){const node=document.createElement('div');node.className='bot-msg '+who;node.textContent=text;messages.appendChild(node);messages.scrollTop=messages.scrollHeight;return node;}
+  async function send(text){
+    const clean=text.trim();
+    if(!clean)return;
+    addMessage(clean,'user');
+    input.disabled=true;
+    form.querySelector('button[type="submit"]').disabled=true;
+    const waiting=addMessage('DEXA BOT está pensando…','bot');
+    try{
+      const response=await fetch(FUNCTION_URL,{
+        method:'POST',
+        headers:{'Content-Type':'application/json','apikey':SUPABASE_PUBLISHABLE_KEY},
+        body:JSON.stringify({message:clean})
+      });
+      const data=await response.json().catch(()=>({}));
+      waiting.remove();
+      if(!response.ok){
+        addMessage(data.error||'No pude conectarme ahora. Inténtalo de nuevo en un momento.','bot');
+      }else{
+        addMessage(typeof data.reply==='string'&&data.reply.trim()?data.reply:'No recibí una respuesta válida. Inténtalo otra vez.','bot');
+      }
+    }catch(error){
+      waiting.remove();
+      addMessage('No pude conectar con el asistente. Puede ser un problema de conexión o de configuración de Supabase.','bot');
+      console.error('DEXA BOT connection error:',error);
+    }finally{
+      input.disabled=false;
+      form.querySelector('button[type="submit"]').disabled=false;
+      input.focus();
+    }
   }
-  function send(text){const clean=text.trim();if(!clean)return;addMessage(clean,'user');addMessage(answer(clean),'bot');}
   launcher.addEventListener('click',()=>toggle(!panel.classList.contains('open')));
   close.addEventListener('click',()=>toggle(false));
-  form.addEventListener('submit',e=>{e.preventDefault();send(input.value);input.value='';input.focus();});
-  panel.querySelectorAll('[data-bot]').forEach(btn=>btn.addEventListener('click',()=>send(({precios:'¿Qué paquetes y precios tienen?',acumulativa:'¿Cómo funciona la recarga acumulativa?',pedido:'¿Cómo hago un pedido?',persona:'Quiero contactar con una persona'})[btn.dataset.bot])));
+  form.addEventListener('submit',e=>{e.preventDefault();const value=input.value;input.value='';send(value);});
+  panel.querySelectorAll('[data-bot]').forEach(btn=>btn.addEventListener('click',()=>send(({precios:'¿Qué paquetes y precios tienen?',acumulativa:'¿Cómo funciona la recarga acumulativa?',pedido:'¿Cómo hago un pedido?',persona:'Quiero contactar con una persona'})[btn.dataset.bot]));
 })();
 
 /* =========================================================
