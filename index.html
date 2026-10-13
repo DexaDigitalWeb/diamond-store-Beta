@@ -1510,10 +1510,8 @@ function initReveal(){
     items.forEach(el=>observer.observe(el));
 }
 
-/* DEXA BOT: conectado a la Edge Function de Supabase */
+/* DEXA BOT GRATUITO: respuestas programadas, sin OpenAI ni llamadas externas */
 (function initDiamondBot(){
-  const FUNCTION_URL='https://tpqezzgxtuibqhcigvif.supabase.co/functions/v1/swift-service';
-  const SUPABASE_PUBLISHABLE_KEY='sb_publishable_L57gawUrnRbPiHyqYzujYA_c2QeNFK4';
   const launcher=document.getElementById('botLauncher');
   const panel=document.getElementById('botPanel');
   const close=document.getElementById('botClose');
@@ -1521,42 +1519,133 @@ function initReveal(){
   const form=document.getElementById('botForm');
   const input=document.getElementById('botInput');
   if(!launcher||!panel||!messages||!form||!input) return;
-  function toggle(open){panel.classList.toggle('open',open);launcher.setAttribute('aria-expanded',String(open));if(open) input.focus();}
-  function addMessage(text,who){const node=document.createElement('div');node.className='bot-msg '+who;node.textContent=text;messages.appendChild(node);messages.scrollTop=messages.scrollHeight;return node;}
-  async function send(text){
+
+  function toggle(open){
+    panel.classList.toggle('open',open);
+    launcher.setAttribute('aria-expanded',String(open));
+    if(open) input.focus();
+  }
+  function addMessage(text,who){
+    const node=document.createElement('div');
+    node.className='bot-msg '+who;
+    node.textContent=text;
+    messages.appendChild(node);
+    messages.scrollTop=messages.scrollHeight;
+    return node;
+  }
+  function normalize(text){
+    return text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim();
+  }
+  function answer(raw){
+    const q=normalize(raw);
+    const has=(re)=>re.test(q);
+
+    // Saludos y conversación básica
+    if(has(/\b(hola|buenas|buenos dias|buenas tardes|buenas noches|hey|que mas|saludos)\b/))
+      return '¡Hola! 👋 Soy DEXA BOT, el asistente automático de Diamond Store. Puedo ayudarte con precios, compras, pagos, recargas acumulativas, códigos y problemas frecuentes. ¿Qué necesitas saber?';
+    if(has(/\b(gracias|muchas gracias|te agradezco|listo|perfecto|excelente)\b/))
+      return '¡Con gusto! 💎 Estoy aquí para orientarte sobre Diamond Store. Si necesitas algo más, escribe tu pregunta o elige uno de los botones de ayuda.';
+    if(has(/\b(chao|adios|hasta luego|nos vemos)\b/))
+      return '¡Hasta luego! 👋 Gracias por visitar Diamond Store. Recuerda revisar los datos de tu pedido antes de enviarlo.';
+    if(has(/\b(quien eres|que eres|eres una ia|eres un robot|eres humano|eres real)\b/))
+      return '🤖 Soy DEXA BOT, un asistente automático con respuestas programadas. No soy una persona ni una IA generativa, y no puedo consultar la base de datos de pedidos.';
+
+    // Identidad y funcionamiento de la tienda
+    if(has(/\b(que es diamond store|que es diamonds store|que es esta pagina|para que sirve|que venden|que ofrece|de que trata|informacion de la tienda)\b/))
+      return '💎 Diamond Store es una página para consultar y solicitar recargas de diamantes de Free Fire. Puedes revisar los paquetes, seguir las instrucciones del pedido y conocer las promociones acumulativas publicadas. Soy DEXA BOT y puedo responder preguntas frecuentes, pero no confirmar pagos ni pedidos.';
+    if(has(/\b(es confiable|es seguro|seguridad|estafa|fraude|me pueden robar|puedo confiar)\b/))
+      return '🔐 Por seguridad, revisa que estés en la página oficial de Diamond Store y sigue únicamente las instrucciones publicadas allí. No compartas contraseñas, códigos de verificación ni datos de acceso. Si tienes dudas antes de pagar, consulta a la administración.';
+    if(has(/\b(horario|horarios|abren|abierto|atienden|cuando atienden)\b/))
+      return '🕒 No tengo un horario de atención confirmado. Revisa los canales de contacto publicados en Diamond Store para conocer la disponibilidad de la administración.';
+
+    // Precios y paquetes
+    if(has(/\b(precio|precios|paquete|paquetes|cuanto|cuestan|vale|valor|diamantes|diamante|tarifa|barato|coste|costo)\b/))
+      return '💎 Paquetes publicados de Diamond Store:\n• 100 diamantes: $3.200 COP\n• 300 diamantes: $10.000 COP\n• 500 diamantes: $17.000 COP\n• 2.000 diamantes: $65.000 COP.\n\nConfirma siempre el paquete y el precio que aparecen en la página antes de pagar.';
+    if(/\b(1000|mil)\b/.test(q) && has(/\b(diamante|diamantes|precio|cuanto|paquete)\b/))
+      return '💎 No tengo un precio confirmado para un paquete de 1.000 diamantes en la lista de precios que conozco. Revisa los paquetes publicados en la página o consulta a la administración antes de pagar.';
+    if(/\b(2000|dos mil)\b/.test(q) && has(/\b(diamante|diamantes|precio|cuanto|paquete)\b/))
+      return '💎 El paquete publicado de 2.000 diamantes cuesta $65.000 COP. Verifica que ese paquete siga disponible en la página antes de pagar.';
+    if(has(/\b(descuento|descuentos|oferta|ofertas|promocion|promociones|rebaja)\b/))
+      return '🎁 La promoción acumulativa publicada ofrece recompensas al completar cierta cantidad de recargas elegibles. Consulta también la sección de promociones de la página para ver las condiciones vigentes. No puedo confirmar promociones nuevas que no estén publicadas.';
+
+    // Recarga acumulativa
+    if(has(/\b(acumul|recompensa|premio|evento infinito|progreso|cuantas recargas|cuantas veces)\b/))
+      return '🔥 Recargas acumulativas publicadas:\n• 10 recargas de 100 diamantes: recompensa adicional de 300 diamantes.\n• 6 recargas de 1.000 diamantes: recompensa adicional de 500 diamantes.\n• 5 recargas de 5.000 diamantes: recompensa adicional de 1.000 diamantes.\n\nSolo cuentan las recargas elegibles y confirmadas. Para revisar tu progreso o reclamar una recompensa, contacta con la administración.';
+    if(/\b(cuenta|cuentan|contar|valida|validas|elegible|elegibles)\b/.test(q) && has(/\b(recarga|recargas|acumul|pedido|diamantes)\b/))
+      return '📊 La promoción solo cuenta recargas elegibles y confirmadas según las condiciones de Diamond Store. No puedo ver tu historial ni calcular tu progreso real; consulta a la administración para verificarlo.';
+    if(has(/\b(reclamar recompensa|obtener recompensa|recibir recompensa|ya complete|complete las|llegue a la meta|meta cumplida)\b/))
+      return '🎁 Si crees que completaste una meta acumulativa, contacta con la administración para verificar las recargas confirmadas y gestionar la recompensa. No puedo consultar tu progreso ni generar códigos desde este chat.';
+
+    // Cómo comprar, ID de jugador y entrega
+    if(has(/\b(comprar|compra|pedido|pedir|como compro|como hago|hacer pedido|recargar|recarga|pasos para comprar)\b/))
+      return '📦 Para hacer un pedido:\n1. Elige el paquete en la sección de diamantes.\n2. Completa el formulario con los datos solicitados.\n3. Revisa dos veces tu ID de jugador y el paquete.\n4. Sigue las instrucciones de pago y envía el comprobante si se solicita.\n\nSi tienes dudas, contacta con la administración.';
+    if(has(/\b(id de jugador|uid|id free fire|numero de jugador|donde veo mi id|como saber mi id)\b/))
+      return '🎮 El ID de jugador es el número que identifica tu cuenta de Free Fire. Revisa tu perfil dentro del juego y copia el ID con cuidado. Antes de enviar el pedido, verifica que todos los números estén correctos. No compartas contraseñas.';
+    if(has(/\b(servidor|region|región|latinoamerica|latam|cuenta de free fire)\b/))
+      return '🌎 Asegúrate de que tu cuenta y los datos del pedido correspondan a los requisitos indicados por Diamond Store. No puedo verificar la región de tu cuenta; si no estás seguro, consulta a la administración antes de pagar.';
+    if(has(/\b(cuanto tarda|tiempo de entrega|demora|demorado|cuando llegan|cuando recibo|entrega inmediata|inmediato)\b/))
+      return '⏱️ No puedo garantizar un tiempo de entrega. Los tiempos pueden depender de la revisión del pedido y del proceso de recarga. Si ya pagaste y necesitas una actualización, contacta con la administración con tu número de pedido.';
+
+    // Pagos y comprobantes
+    if(has(/\b(pago|pagar|nequi|comprobante|transferencia|consignacion|consignación|metodo de pago|medios de pago|cuenta para pagar)\b/))
+      return '💳 Sigue únicamente las instrucciones de pago que aparecen en la página al realizar tu pedido y adjunta el comprobante si el formulario lo solicita. Verifica el destinatario y el valor antes de enviar dinero. Nunca compartas contraseñas ni códigos de seguridad. No puedo confirmar transacciones.';
+    if(has(/\b(pague|pagué|ya pague|ya pagué|envie el comprobante|envié el comprobante|comprobante enviado)\b/))
+      return '🧾 Si ya pagaste, conserva el comprobante y contacta con la administración para confirmar que lo recibieron y que el pedido está en revisión. No envíes aquí información bancaria sensible; yo no puedo verificar pagos.';
+    if(has(/\b(pago rechazado|no pasa el pago|error al pagar|no puedo pagar|fallo el pago|falló el pago)\b/))
+      return '💳 Revisa que sigas las instrucciones de pago de la página y que el valor sea correcto. No repitas un pago si no sabes si el anterior se procesó; primero consulta con la administración y conserva el comprobante.';
+
+    // Seguimiento, cancelaciones y problemas
+    if(has(/\b(estado|llego|llegaron|no llega|no me llega|pendiente|cancelado|cancelar|reembolso|devolucion|devolución|pedido no aparece|sin respuesta)\b/))
+      return '📋 No tengo acceso a los pedidos y no puedo confirmar estados de recargas, pagos, cancelaciones ni devoluciones. Contacta con la administración de Diamond Store y facilita el número de pedido si lo tienes. Conserva el comprobante y nunca envíes contraseñas.';
+    if(has(/\b(me equivoque|me equivoqué|id incorrecto|puse mal|dato incorrecto|pedido equivocado)\b/))
+      return '⚠️ Si escribiste mal el ID o algún dato, contacta con la administración cuanto antes y explica el error con tu número de pedido. No puedo editar pedidos desde este chat y no debes realizar otro pago para intentar corregirlo sin recibir instrucciones.';
+    if(has(/\b(no funciona|error|fallo|falla|problema|pagina no abre|página no abre|no carga|se queda cargando)\b/))
+      return '🛠️ Prueba actualizar la página y revisar tu conexión. Si el problema continúa, toma una captura sin mostrar información privada y contacta con la administración. No compartas contraseñas ni códigos de verificación.';
+
+    // Códigos, contacto y privacidad
+    if(has(/\b(codigo|código|canjear|canje|redimir|validar codigo|codigo no funciona|código no funciona)\b/))
+      return '🎟️ Para canjear un código, utiliza la sección de canje de la página y sigue sus instrucciones. No puedo crear, validar ni consultar códigos desde este chat. Si el código no funciona, contacta con la administración y evita publicarlo en grupos.';
+    if(has(/\b(whatsapp|contacto|contactar|administrador|administracion|administración|persona|humano|asesor|soporte|atencion|atención|hablar con alguien)\b/))
+      return '👤 Para recibir ayuda con un pago, pedido, recarga o recompensa, utiliza el canal de contacto o el grupo de WhatsApp publicado en la página de Diamond Store. No puedo comprobar pedidos ni pagos desde este chat.';
+    if(has(/\b(contrasena|contraseña|password|clave|pin|codigo de verificacion|código de verificación|datos personales)\b/))
+      return '🔐 Nunca compartas tu contraseña, PIN ni códigos de verificación con el bot ni con otras personas. Para un pedido, proporciona únicamente los datos que solicite el formulario oficial de Diamond Store.';
+    if(has(/\b(que puedes hacer|que sabes|ayuda|opciones|preguntas frecuentes|faq)\b/))
+      return '🤖 Puedo orientarte sobre:\n• Precios de diamantes.\n• Promociones acumulativas.\n• Cómo comprar y encontrar tu ID.\n• Pagos y comprobantes.\n• Entrega y seguimiento de pedidos.\n• Códigos de canje.\n• Problemas de la página y contacto con administración.\n\nMis respuestas son programadas y no puedo acceder a tus pedidos.';
+
+    return '🤖 No encontré una respuesta exacta para esa pregunta. Puedes probar con: “precios”, “cómo comprar”, “¿dónde veo mi ID?”, “cómo pagar”, “¿cuánto tarda la recarga?”, “no me llegaron los diamantes”, “recarga acumulativa”, “canjear código” o “contactar con administración”. Mis respuestas son programadas y no puedo verificar pedidos ni pagos.';
+  }
+  function send(text){
     const clean=text.trim();
-    if(!clean)return;
+    if(!clean) return;
     addMessage(clean,'user');
     input.disabled=true;
-    form.querySelector('button[type="submit"]').disabled=true;
-    const waiting=addMessage('DEXA BOT está pensando…','bot');
-    try{
-      const response=await fetch(FUNCTION_URL,{
-        method:'POST',
-        headers:{'Content-Type':'application/json','apikey':SUPABASE_PUBLISHABLE_KEY},
-        body:JSON.stringify({message:clean})
-      });
-      const data=await response.json().catch(()=>({}));
-      waiting.remove();
-      if(!response.ok){
-        addMessage(data.error||'No pude conectarme ahora. Inténtalo de nuevo en un momento.','bot');
-      }else{
-        addMessage(typeof data.reply==='string'&&data.reply.trim()?data.reply:'No recibí una respuesta válida. Inténtalo otra vez.','bot');
-      }
-    }catch(error){
-      waiting.remove();
-      addMessage('No pude conectar con el asistente. Puede ser un problema de conexión o de configuración de Supabase.','bot');
-      console.error('DEXA BOT connection error:',error);
-    }finally{
+    const submit=form.querySelector('button[type="submit"]');
+    if(submit) submit.disabled=true;
+    // Respuesta local inmediata: no llama a OpenAI ni a Supabase.
+    window.setTimeout(()=>{
+      addMessage(answer(clean),'bot');
       input.disabled=false;
-      form.querySelector('button[type="submit"]').disabled=false;
+      if(submit) submit.disabled=false;
       input.focus();
-    }
+    },180);
   }
   launcher.addEventListener('click',()=>toggle(!panel.classList.contains('open')));
-  close.addEventListener('click',()=>toggle(false));
-  form.addEventListener('submit',e=>{e.preventDefault();const value=input.value;input.value='';send(value);});
-  panel.querySelectorAll('[data-bot]').forEach(btn=>btn.addEventListener('click',()=>send(({precios:'¿Qué paquetes y precios tienen?',acumulativa:'¿Cómo funciona la recarga acumulativa?',pedido:'¿Cómo hago un pedido?',persona:'Quiero contactar con una persona'})[btn.dataset.bot])));
+  if(close) close.addEventListener('click',()=>toggle(false));
+  form.addEventListener('submit',e=>{
+    e.preventDefault();
+    const value=input.value;
+    input.value='';
+    send(value);
+  });
+  panel.querySelectorAll('[data-bot]').forEach(btn=>btn.addEventListener('click',()=>{
+    const prompts={
+      precios:'¿Qué paquetes y precios tienen?',
+      acumulativa:'¿Cómo funciona la recarga acumulativa?',
+      pedido:'¿Cómo hago un pedido?',
+      persona:'Quiero contactar con una persona'
+    };
+    send(prompts[btn.dataset.bot]||btn.textContent.trim());
+  }));
 })();
 
 /* =========================================================
