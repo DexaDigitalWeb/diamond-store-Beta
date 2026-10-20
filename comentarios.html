@@ -39,7 +39,7 @@ footer{position:relative;z-index:1;text-align:center;border-top:1px solid var(--
 <section id="comentarios" class="grid">
 <div class="panel">
 <h2>✍️ DEJA TU COMENTARIO</h2>
-<p class="desc">Escribe una opinión respetuosa. Los comentarios se revisan antes de aparecer públicamente.</p>
+<p class="desc">Escribe una opinión respetuosa. Los comentarios se publican automáticamente; el equipo de Diamond Store puede retirar los que incumplan las normas.</p>
 <label for="name">👤 Nombre o nickname</label><input id="name" maxlength="30" placeholder="Ej: Wualter">
 <label>⭐ Tu valoración</label>
 <div class="stars" id="stars">
@@ -76,11 +76,11 @@ $('send').onclick=async()=>{
  if(!$('respect').checked)return notice('⚠️ Acepta la norma de comentarios respetuosos.','err');
  $('send').disabled=true;$('send').textContent='⏳ ENVIANDO...';
  try{
-  let r=await fetch(URL+'/rest/v1/'+TABLE,{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({nombre:name,estrellas:rating,comentario:comment,aprobado:false})});
+  let r=await fetch(URL+'/rest/v1/'+TABLE,{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({nombre:name,estrellas:rating,comentario:comment,aprobado:true})});
   if(!r.ok)throw Error(await r.text());
   $('name').value='';$('comment').value='';$('counter').textContent='0';$('respect').checked=false;rating=0;
   document.querySelectorAll('.star').forEach(s=>s.classList.remove('active'));
-  notice('✅ Enviado. Aparecerá después de ser aprobado.','ok');
+  notice('✅ ¡Comentario publicado! Si incumple las normas, podrá retirarse desde Supabase.','ok');
  }catch(e){console.error(e);notice('❌ No se pudo enviar. Revisa la configuración de Supabase.','err')}
  $('send').disabled=false;$('send').textContent='🚀 PUBLICAR COMENTARIO';
 };
