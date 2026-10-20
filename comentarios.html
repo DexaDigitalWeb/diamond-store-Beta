@@ -76,7 +76,7 @@ $('send').onclick=async()=>{
  if(!$('respect').checked)return notice('⚠️ Acepta la norma de comentarios respetuosos.','err');
  $('send').disabled=true;$('send').textContent='⏳ ENVIANDO...';
  try{
-  let r=await fetch(URL+'/functions/v1/publicar-comentario',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify({nombre:name,estrellas:rating,comentario:comment})});
+  let r=await fetch(URL+'/rest/v1/'+TABLE,{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({nombre:name,estrellas:rating,comentario:comment,aprobado:true})});
   if(!r.ok)throw Error(await r.text());
   $('name').value='';$('comment').value='';$('counter').textContent='0';$('respect').checked=false;rating=0;
   document.querySelectorAll('.star').forEach(s=>s.classList.remove('active'));
