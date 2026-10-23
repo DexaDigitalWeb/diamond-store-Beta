@@ -525,6 +525,190 @@ body {
   background-attachment: fixed;
 }
 
+
+/* =========================================================
+   DECORACIÓN WALOWEEN — telarañas, araña, murciélagos, niebla
+========================================================= */
+.halloween-deco{position:fixed;inset:0;z-index:60;pointer-events:none;overflow:hidden}
+
+/* ----- Luna embrujada ----- */
+.halloween-moon{
+  position:absolute;top:86px;right:9%;width:110px;height:110px;border-radius:50%;
+  background:radial-gradient(circle at 38% 34%,#fff7e0,#ffd98a 55%,#f5a623 100%);
+  box-shadow:0 0 60px 18px rgba(255,190,90,.28),0 0 140px 60px rgba(255,140,40,.12);
+  opacity:.92;
+}
+.halloween-moon::before,.halloween-moon::after{
+  content:"";position:absolute;border-radius:50%;
+  background:rgba(190,120,40,.28);
+}
+.halloween-moon::before{width:22px;height:22px;top:26%;left:30%}
+.halloween-moon::after{width:13px;height:13px;top:55%;left:58%}
+@keyframes moonDrift{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.halloween-moon{animation:moonDrift 9s ease-in-out infinite}
+
+/* ----- Telarañas en las esquinas ----- */
+.web{position:absolute;width:clamp(110px,16vw,200px);opacity:.85;filter:drop-shadow(0 0 6px rgba(180,120,255,.35))}
+.web svg{width:100%;height:auto;display:block}
+.web-tl{top:0;left:0}
+.web-tr{top:0;right:0;transform:scaleX(-1)}
+.web-br{bottom:0;right:0;transform:rotate(180deg)}
+.web-bl{bottom:0;left:0;transform:scaleY(-1)}
+@keyframes webSway{0%,100%{opacity:.85}50%{opacity:.65}}
+.web{animation:webSway 6s ease-in-out infinite}
+
+/* ----- Araña colgante ----- */
+.spider-scene{position:absolute;top:0;right:22%}
+.spider-thread{
+  width:2px;height:150px;margin:0 auto;
+  background:linear-gradient(rgba(230,220,255,.65),rgba(230,220,255,.1));
+  transform-origin:top center;
+  animation:threadDrop 7s ease-in-out infinite;
+}
+@keyframes threadDrop{
+  0%{height:0}
+  35%{height:150px}
+  70%{height:118px}
+  100%{height:150px}
+}
+.spider{
+  position:relative;width:70px;height:60px;margin:-3px auto 0;
+  transform-origin:top center;
+  animation:spiderSway 3.2s ease-in-out infinite;
+}
+@keyframes spiderSway{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+.spider-body{
+  position:absolute;left:50%;top:16px;transform:translateX(-50%);
+  width:32px;height:40px;border-radius:50% 50% 46% 46%;
+  background:radial-gradient(circle at 35% 28%,#5b2475,#180a26 72%);
+  box-shadow:0 0 20px rgba(155,44,214,.5);
+}
+.spider-body::after{ /* marca de hourglass estilo viuda */
+  content:"";position:absolute;inset:8px 10px;border-radius:50%;
+  background:rgba(255,122,24,.85);
+  clip-path:polygon(20% 0,80% 0,55% 38%,80% 100%,20% 100%,45% 38%);
+  opacity:.9;
+}
+.spider-head{
+  position:absolute;left:50%;top:2px;transform:translateX(-50%);
+  width:24px;height:20px;border-radius:50%;
+  background:radial-gradient(circle at 40% 35%,#6a2a8a,#14081f 78%);
+}
+.spider-eyes{position:absolute;left:50%;top:8px;transform:translateX(-50%);display:flex;gap:7px}
+.spider-eyes i{width:5px;height:5px;border-radius:50%;background:#ffb545;box-shadow:0 0 8px #ff7a18;animation:eyeGlow 2.4s infinite}
+@keyframes eyeGlow{50%{opacity:.4}}
+.spider-legs span{
+  position:absolute;width:30px;height:3px;border-radius:3px;
+  background:#14081f;transform-origin:right center;
+  animation:legWiggle 1.4s ease-in-out infinite;
+}
+@keyframes legWiggle{0%,100%{transform:rotate(var(--r)) translateY(0)}50%{transform:rotate(calc(var(--r) + 7deg)) translateY(-2px)}}
+.spider-legs .sl1{--r:-150deg;left:-14px;top:14px}
+.spider-legs .sl2{--r:-115deg;left:-16px;top:26px;animation-delay:.15s}
+.spider-legs .sl3{--r:-75deg;left:-16px;top:38px;animation-delay:.3s}
+.spider-legs .sl4{--r:-40deg;left:-12px;top:48px;animation-delay:.45s}
+.spider-legs .sr1{--r:150deg;right:-14px;top:14px;animation-delay:.2s}
+.spider-legs .sr2{--r:115deg;right:-16px;top:26px;animation-delay:.35s}
+.spider-legs .sr3{--r:75deg;right:-16px;top:38px;animation-delay:.5s}
+.spider-legs .sr4{--r:40deg;right:-12px;top:48px;animation-delay:.6s}
+
+/* ----- Murciélagos voladores ----- */
+.bat{position:absolute;font-size:clamp(1.4rem,3vw,2.4rem);opacity:0;filter:drop-shadow(0 0 10px rgba(120,40,180,.6))}
+.bat-1{top:16%;animation:flyAcross 17s linear infinite 2s}
+.bat-2{top:30%;font-size:clamp(1rem,2vw,1.6rem);animation:flyAcross 23s linear infinite 8s}
+.bat-3{top:10%;font-size:clamp(.9rem,1.6vw,1.3rem);animation:flyAcross 27s linear infinite 14s}
+.bat-4{top:42%;font-size:clamp(1.1rem,2.2vw,1.8rem);animation:flyAcross 21s linear infinite 5s}
+@keyframes flyAcross{
+  0%{left:-8%;opacity:0;transform:translateY(0) scaleX(1)}
+  8%{opacity:.85}
+  25%{transform:translateY(-34px) scaleX(1)}
+  50%{transform:translateY(22px) scaleX(1)}
+  75%{transform:translateY(-20px) scaleX(1)}
+  92%{opacity:.85}
+  100%{left:106%;opacity:0;transform:translateY(0) scaleX(1)}
+}
+
+/* ----- Bruja ocasional ----- */
+.witch-ride{
+  position:absolute;top:6%;font-size:clamp(1.8rem,4vw,3rem);opacity:0;
+  animation:witchFly 40s linear infinite 12s;
+  filter:drop-shadow(0 0 14px rgba(255,112,22,.55));
+}
+@keyframes witchFly{
+  0%{right:-10%;opacity:0;transform:translateY(0)}
+  5%{opacity:.9}
+  30%{transform:translateY(-46px)}
+  60%{transform:translateY(30px)}
+  95%{opacity:.9}
+  100%{right:108%;opacity:0;transform:translateY(0)}
+}
+
+/* ----- Fantasma errante ----- */
+.ghost-waloween{
+  position:absolute;bottom:14%;left:5%;font-size:clamp(1.8rem,4vw,3rem);
+  opacity:.5;filter:drop-shadow(0 0 18px rgba(200,220,255,.5));
+  animation:ghostFloat 11s ease-in-out infinite;
+}
+@keyframes ghostFloat{
+  0%,100%{transform:translate(0,0) rotate(-4deg);opacity:.35}
+  25%{transform:translate(46px,-56px) rotate(4deg);opacity:.6}
+  50%{transform:translate(90px,-20px) rotate(-3deg);opacity:.45}
+  75%{transform:translate(40px,20px) rotate(5deg);opacity:.6}
+}
+
+/* ----- Niebla baja ----- */
+.fog{position:absolute;bottom:-70px;width:130%;height:240px;filter:blur(34px);opacity:.32;border-radius:50%}
+.fog-1{
+  left:-20%;
+  background:radial-gradient(ellipse at center,rgba(139,34,214,.5),transparent 70%);
+  animation:fogMove 26s ease-in-out infinite alternate;
+}
+.fog-2{
+  right:-25%;
+  background:radial-gradient(ellipse at center,rgba(255,112,22,.34),transparent 70%);
+  animation:fogMove 32s ease-in-out infinite alternate-reverse;
+}
+@keyframes fogMove{0%{transform:translateX(-6%)}100%{transform:translateX(6%)}}
+
+/* ----- Calabazas y tumbas del footer ----- */
+footer{position:relative;overflow:hidden}
+.footer-pumpkin{
+  position:absolute;bottom:4px;font-size:2.6rem;
+  filter:drop-shadow(0 0 16px rgba(255,140,30,.6));
+  animation:pumpkinGlow 3s ease-in-out infinite;
+}
+.footer-pumpkin.fp-left{left:18px}
+.footer-pumpkin.fp-right{right:18px;animation-delay:1.4s}
+@keyframes pumpkinGlow{0%,100%{filter:drop-shadow(0 0 10px rgba(255,140,30,.45))}50%{filter:drop-shadow(0 0 26px rgba(255,150,40,.85))}}
+.footer-tomb{
+  position:absolute;bottom:0;font-size:1.7rem;opacity:.4;
+  filter:grayscale(.4) drop-shadow(0 0 8px rgba(120,120,160,.4));
+}
+.footer-tomb.t1{left:76px}
+.footer-tomb.t2{right:80px;font-size:1.3rem;opacity:.3}
+.footer-tomb.t3{right:130px;font-size:1.1rem;opacity:.22}
+
+/* ----- Títulos con parpadeo sutil de vela ----- */
+@keyframes candleFlicker{
+  0%,100%{text-shadow:0 0 22px rgba(255,112,22,.55)}
+  45%{text-shadow:0 0 14px rgba(255,112,22,.3)}
+  50%{text-shadow:0 0 30px rgba(255,140,40,.8)}
+  55%{text-shadow:0 0 16px rgba(255,112,22,.35)}
+}
+.section-title .accent{animation:candleFlicker 6s infinite}
+
+/* ----- Ajustes responsive de la decoración ----- */
+@media(max-width:700px){
+  .halloween-moon{width:64px;height:64px;top:96px;right:6%}
+  .spider-scene{right:10%}
+  .spider-thread{animation-duration:5.5s}
+  .ghost-waloween{left:2%;bottom:20%}
+  .footer-pumpkin{font-size:1.9rem}
+  .footer-pumpkin.fp-left{left:8px}
+  .footer-pumpkin.fp-right{right:8px}
+  .footer-tomb{display:none}
+}
+
 </style>
 </head>
 
@@ -549,6 +733,40 @@ body {
 </div>
 
 <div id="particles" aria-hidden="true"></div>
+
+<!-- ══════════════ DECORACIÓN WALOWEEN ══════════════ -->
+<div class="halloween-deco" aria-hidden="true">
+    <div class="halloween-moon"></div>
+
+    <div class="web web-tl"><svg class="web-svg" viewBox="0 0 200 200" aria-hidden="true"><g stroke="rgba(228,216,255,.5)" stroke-width="1.4" fill="none" stroke-linecap="round"><line x1="0" y1="0" x2="195.0" y2="0.0"/><line x1="0" y1="0" x2="188.4" y2="50.5"/><line x1="0" y1="0" x2="168.9" y2="97.5"/><line x1="0" y1="0" x2="137.9" y2="137.9"/><line x1="0" y1="0" x2="97.5" y2="168.9"/><line x1="0" y1="0" x2="50.5" y2="188.4"/><line x1="0" y1="0" x2="0.0" y2="195.0"/><path d="M 45.0 0.0 Q 44.6 5.9 43.5 11.6 Q 41.6 17.2 39.0 22.5 Q 35.7 27.4 31.8 31.8 Q 27.4 35.7 22.5 39.0 Q 17.2 41.6 11.6 43.5 Q 5.9 44.6 0.0 45.0 "/><path d="M 85.0 0.0 Q 84.3 11.1 82.1 22.0 Q 78.5 32.5 73.6 42.5 Q 67.4 51.7 60.1 60.1 Q 51.7 67.4 42.5 73.6 Q 32.5 78.5 22.0 82.1 Q 11.1 84.3 0.0 85.0 "/><path d="M 125.0 0.0 Q 123.9 16.3 120.7 32.4 Q 115.5 47.8 108.3 62.5 Q 99.2 76.1 88.4 88.4 Q 76.1 99.2 62.5 108.3 Q 47.8 115.5 32.4 120.7 Q 16.3 123.9 0.0 125.0 "/><path d="M 160.0 0.0 Q 158.6 20.9 154.5 41.4 Q 147.8 61.2 138.6 80.0 Q 126.9 97.4 113.1 113.1 Q 97.4 126.9 80.0 138.6 Q 61.2 147.8 41.4 154.5 Q 20.9 158.6 0.0 160.0 "/></g></svg></div>
+    <div class="web web-tr"><svg class="web-svg" viewBox="0 0 200 200" aria-hidden="true"><g stroke="rgba(228,216,255,.5)" stroke-width="1.4" fill="none" stroke-linecap="round"><line x1="0" y1="0" x2="195.0" y2="0.0"/><line x1="0" y1="0" x2="188.4" y2="50.5"/><line x1="0" y1="0" x2="168.9" y2="97.5"/><line x1="0" y1="0" x2="137.9" y2="137.9"/><line x1="0" y1="0" x2="97.5" y2="168.9"/><line x1="0" y1="0" x2="50.5" y2="188.4"/><line x1="0" y1="0" x2="0.0" y2="195.0"/><path d="M 45.0 0.0 Q 44.6 5.9 43.5 11.6 Q 41.6 17.2 39.0 22.5 Q 35.7 27.4 31.8 31.8 Q 27.4 35.7 22.5 39.0 Q 17.2 41.6 11.6 43.5 Q 5.9 44.6 0.0 45.0 "/><path d="M 85.0 0.0 Q 84.3 11.1 82.1 22.0 Q 78.5 32.5 73.6 42.5 Q 67.4 51.7 60.1 60.1 Q 51.7 67.4 42.5 73.6 Q 32.5 78.5 22.0 82.1 Q 11.1 84.3 0.0 85.0 "/><path d="M 125.0 0.0 Q 123.9 16.3 120.7 32.4 Q 115.5 47.8 108.3 62.5 Q 99.2 76.1 88.4 88.4 Q 76.1 99.2 62.5 108.3 Q 47.8 115.5 32.4 120.7 Q 16.3 123.9 0.0 125.0 "/><path d="M 160.0 0.0 Q 158.6 20.9 154.5 41.4 Q 147.8 61.2 138.6 80.0 Q 126.9 97.4 113.1 113.1 Q 97.4 126.9 80.0 138.6 Q 61.2 147.8 41.4 154.5 Q 20.9 158.6 0.0 160.0 "/></g></svg></div>
+    <div class="web web-br"><svg class="web-svg" viewBox="0 0 200 200" aria-hidden="true"><g stroke="rgba(228,216,255,.5)" stroke-width="1.4" fill="none" stroke-linecap="round"><line x1="0" y1="0" x2="195.0" y2="0.0"/><line x1="0" y1="0" x2="188.4" y2="50.5"/><line x1="0" y1="0" x2="168.9" y2="97.5"/><line x1="0" y1="0" x2="137.9" y2="137.9"/><line x1="0" y1="0" x2="97.5" y2="168.9"/><line x1="0" y1="0" x2="50.5" y2="188.4"/><line x1="0" y1="0" x2="0.0" y2="195.0"/><path d="M 45.0 0.0 Q 44.6 5.9 43.5 11.6 Q 41.6 17.2 39.0 22.5 Q 35.7 27.4 31.8 31.8 Q 27.4 35.7 22.5 39.0 Q 17.2 41.6 11.6 43.5 Q 5.9 44.6 0.0 45.0 "/><path d="M 85.0 0.0 Q 84.3 11.1 82.1 22.0 Q 78.5 32.5 73.6 42.5 Q 67.4 51.7 60.1 60.1 Q 51.7 67.4 42.5 73.6 Q 32.5 78.5 22.0 82.1 Q 11.1 84.3 0.0 85.0 "/><path d="M 125.0 0.0 Q 123.9 16.3 120.7 32.4 Q 115.5 47.8 108.3 62.5 Q 99.2 76.1 88.4 88.4 Q 76.1 99.2 62.5 108.3 Q 47.8 115.5 32.4 120.7 Q 16.3 123.9 0.0 125.0 "/><path d="M 160.0 0.0 Q 158.6 20.9 154.5 41.4 Q 147.8 61.2 138.6 80.0 Q 126.9 97.4 113.1 113.1 Q 97.4 126.9 80.0 138.6 Q 61.2 147.8 41.4 154.5 Q 20.9 158.6 0.0 160.0 "/></g></svg></div>
+    <div class="web web-bl"><svg class="web-svg" viewBox="0 0 200 200" aria-hidden="true"><g stroke="rgba(228,216,255,.5)" stroke-width="1.4" fill="none" stroke-linecap="round"><line x1="0" y1="0" x2="195.0" y2="0.0"/><line x1="0" y1="0" x2="188.4" y2="50.5"/><line x1="0" y1="0" x2="168.9" y2="97.5"/><line x1="0" y1="0" x2="137.9" y2="137.9"/><line x1="0" y1="0" x2="97.5" y2="168.9"/><line x1="0" y1="0" x2="50.5" y2="188.4"/><line x1="0" y1="0" x2="0.0" y2="195.0"/><path d="M 45.0 0.0 Q 44.6 5.9 43.5 11.6 Q 41.6 17.2 39.0 22.5 Q 35.7 27.4 31.8 31.8 Q 27.4 35.7 22.5 39.0 Q 17.2 41.6 11.6 43.5 Q 5.9 44.6 0.0 45.0 "/><path d="M 85.0 0.0 Q 84.3 11.1 82.1 22.0 Q 78.5 32.5 73.6 42.5 Q 67.4 51.7 60.1 60.1 Q 51.7 67.4 42.5 73.6 Q 32.5 78.5 22.0 82.1 Q 11.1 84.3 0.0 85.0 "/><path d="M 125.0 0.0 Q 123.9 16.3 120.7 32.4 Q 115.5 47.8 108.3 62.5 Q 99.2 76.1 88.4 88.4 Q 76.1 99.2 62.5 108.3 Q 47.8 115.5 32.4 120.7 Q 16.3 123.9 0.0 125.0 "/><path d="M 160.0 0.0 Q 158.6 20.9 154.5 41.4 Q 147.8 61.2 138.6 80.0 Q 126.9 97.4 113.1 113.1 Q 97.4 126.9 80.0 138.6 Q 61.2 147.8 41.4 154.5 Q 20.9 158.6 0.0 160.0 "/></g></svg></div>
+
+    <div class="spider-scene">
+        <div class="spider-thread"></div>
+        <div class="spider">
+            <div class="spider-legs">
+                <span class="sl1"></span><span class="sl2"></span><span class="sl3"></span><span class="sl4"></span>
+                <span class="sr1"></span><span class="sr2"></span><span class="sr3"></span><span class="sr4"></span>
+            </div>
+            <div class="spider-body"></div>
+            <div class="spider-head"></div>
+            <div class="spider-eyes"><i></i><i></i></div>
+        </div>
+    </div>
+
+    <div class="bat bat-1">🦇</div>
+    <div class="bat bat-2">🦇</div>
+    <div class="bat bat-3">🦇</div>
+    <div class="bat bat-4">🦇</div>
+    <div class="witch-ride">🧙‍♀️</div>
+    <div class="ghost-waloween">👻</div>
+
+    <div class="fog fog-1"></div>
+    <div class="fog fog-2"></div>
+</div>
+
 
 <!-- NAVBAR -->
 <nav class="navbar" id="navbar">
@@ -768,6 +986,11 @@ body {
 
 <!-- FOOTER -->
 <footer>
+    <span class="footer-pumpkin fp-left">🎃</span>
+    <span class="footer-pumpkin fp-right">🎃</span>
+    <span class="footer-tomb t1">🪦</span>
+    <span class="footer-tomb t2">🪦</span>
+    <span class="footer-tomb t3">🪦</span>
     <strong>💎 DIAMOND STORE</strong>
     <p>Recargas y atención para jugadores.</p>
     <p>*Las estadísticas mostradas son ilustrativas. Los precios y promociones pueden cambiar.</p>
