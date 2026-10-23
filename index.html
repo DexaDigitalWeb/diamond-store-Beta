@@ -857,14 +857,14 @@ footer{position:relative;overflow:hidden}
 </div>
 
 <section style="margin:18px auto;padding:18px;text-align:center;border:2px solid #f5c542;border-radius:16px;background:linear-gradient(135deg,#17121f,#33200b);max-width:1000px">
-  <h2 style="margin:0 0 8px;color:#ffd34d">⚫🔥 VIERNES NEGRO · MUY PRONTO 🔥⚫</h2>
-  <p style="margin:0;color:#fff">¡Prepárate para aprovechar los precios especiales! El evento será <strong>todos los viernes, de 5:00 p. m. a 10:00 p. m.</strong></p>
-  <p style="margin:8px 0 0;color:#ffe8a3;font-size:13px">Los precios especiales se anunciarán cuando el evento esté activo. Horario previsto: viernes de 5:00 p. m. a 10:00 p. m.</p>
+  <h2 style="margin:0 0 8px;color:#ffd34d">⚫🔥 ¡VIERNES NEGRO · EVENTO ACTIVO! 🔥⚫</h2>
+  <p style="margin:0;color:#fff">¡El evento está activo! 🖤 Aprovecha un <strong>25 % DE DESCUENTO</strong> en todos los paquetes de diamantes.</p>
+  <p style="margin:8px 0 0;color:#ffe8a3;font-size:13px">Promoción temporal de Viernes Negro. Los precios promocionales estarán disponibles hasta que termine el evento. Consulta por WhatsApp antes de pagar.</p>
 </section>
 
 <!-- FEATURED -->
 <section class="reveal">
-    <span class="eyebrow">⚫ VIERNES NEGRO · MUY PRONTO</span>
+    <span class="eyebrow">⚫ VIERNES NEGRO · 25 % DE DESCUENTO</span>
     <h2 class="section-title">🔥 EL <span class="accent">FAVORITO</span> DE LA COMUNIDAD</h2>
     <p class="section-subtitle">El paquete más pedido por nuestros clientes, con el mejor ahorro por diamante.</p>
 
@@ -872,10 +872,10 @@ footer{position:relative;overflow:hidden}
         <div class="featured-badge">⭐ MÁS POPULAR</div>
         <h3>PAQUETE FAVORITO</h3>
         <div class="featured-diamonds">💎 <span class="accent">500</span> DIAMANTES</div>
-        <div class="old-price">Precio de referencia: $20.000 COP</div>
-        <div class="featured-price">$14.000 COP</div>
-        <div class="save">💰 Ahorras $6.000 COP</div>
-        <button class="btn btn-primary" onclick="openModal(500,14000,6000,20000)">COMPRAR 500 💎</button>
+        <div class="old-price">Precio anterior: $14.000 COP</div>
+        <div class="featured-price">$10.500 COP</div>
+        <div class="save">🔥 Ahorras $3.500 COP · 25 % OFF</div>
+        <button class="btn btn-primary" onclick="openModal(500,10500,3500,14000)">COMPRAR 500 💎</button>
     </div>
 </section>
 
@@ -1091,13 +1091,15 @@ footer{position:relative;overflow:hidden}
 /* =========================================================
    DATOS
 ========================================================= */
+/* Precios temporales de Viernes Negro; el paquete de 5.000 tiene precio especial de $110.000 COP. */
+const BLACK_FRIDAY_DISCOUNT = 0.25;
 const packages = [
-    {diamonds:100, price:3700, reference:4200},
-    {diamonds:300, price:8500, reference:12000},
-    {diamonds:500, price:14000, reference:20000, popular:true},
-    {diamonds:1000, price:24500, reference:38600},
-    {diamonds:2000, price:48000, reference:79600},
-    {diamonds:5000, price:120000, reference:182400}
+    {diamonds:100, basePrice:3700, price:3000, reference:3700},
+    {diamonds:300, basePrice:10000, price:7000, reference:10000},
+    {diamonds:500, basePrice:16000, price:12000, reference:16000, popular:true},
+    {diamonds:1000, basePrice:29500, price:22000, reference:29500},
+    {diamonds:2000, basePrice:58000, price:43000, reference:58000},
+    {diamonds:5000, basePrice:145000, price:110000, reference:145000}
 ];
 
 let currentPackage = null;
@@ -1360,20 +1362,18 @@ function renderPackages(){
     packages.forEach(pkg=>{
         const card = document.createElement('div');
         card.className = 'card' + (pkg.popular ? ' popular' : '');
-        let savingText = '';
-        if(pkg.reference){
-            const saving = pkg.reference - pkg.price;
-            savingText = `💰 Ahorras $${saving.toLocaleString('es-CO')} COP`;
-        }
+        const basePrice = pkg.basePrice ?? pkg.price;
+        const saving = basePrice - pkg.price;
+        const savingText = saving > 0 ? `🔥 Ahorras $${saving.toLocaleString('es-CO')} COP (25 % OFF)` : '';
         card.innerHTML = `
             ${pkg.popular ? `<div class="popular-label">⭐ MÁS POPULAR</div>` : ''}
             <div class="diamond">💎</div>
             <div class="amount">${pkg.diamonds.toLocaleString('es-CO')}</div>
             <div class="amount-label">DIAMANTES</div>
+            <div class="reference"><span style="text-decoration:line-through">Antes: $${basePrice.toLocaleString('es-CO')} COP</span></div>
             <div class="price">$${pkg.price.toLocaleString('es-CO')} COP</div>
-            <div class="reference">${pkg.reference ? `Referencia: $${pkg.reference.toLocaleString('es-CO')} COP` : 'Precio competitivo'}</div>
             <div class="saving">${savingText}</div>
-            <button class="buy" onclick="openModal(${pkg.diamonds},${pkg.price},${pkg.reference ? pkg.reference-pkg.price : 0},${pkg.reference || 0})">COMPRAR 💎</button>
+            <button class="buy" onclick="openModal(${pkg.diamonds},${pkg.price},${saving},${basePrice})">COMPRAR 💎</button>
         `;
         container.appendChild(card);
     });
