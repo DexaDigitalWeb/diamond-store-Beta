@@ -391,6 +391,140 @@ footer p{margin-top:10px;color:var(--muted);font-size:.95rem;line-height:1.6}
     *,*::before,*::after{animation-duration:.001s!important;transition-duration:.001s!important}
     html{scroll-behavior:auto}
 }
+
+/* =========================================================
+   TEMA ESPECIAL HALLOWEEN — conserva las funciones originales
+========================================================= */
+:root{
+  --bg:#08040d;
+  --bg-2:#120719;
+  --panel:rgba(24,10,31,.88);
+  --line:rgba(255,128,30,.22);
+  --line-cyan:rgba(255,112,22,.42);
+  --cyan:#ff7a18;
+  --violet:#8b22d6;
+  --magenta:#f044a4;
+  --green:#8be34a;
+  --gold:#ffbd35;
+  --red:#ff4c35;
+  --text:#fff4e8;
+  --muted:#c7adc9;
+  --shadow-card:0 18px 45px -18px rgba(0,0,0,.8);
+  --glow-sm:0 0 18px rgba(255,112,22,.25);
+  --glow-md:0 0 30px rgba(255,112,22,.34);
+  --glow-lg:0 0 44px rgba(255,112,22,.4);
+}
+body{
+  background:
+    radial-gradient(ellipse at 50% 0%,rgba(111,22,144,.32),transparent 46%),
+    radial-gradient(ellipse at 10% 28%,rgba(255,91,0,.13),transparent 38%),
+    radial-gradient(ellipse at 90% 58%,rgba(105,23,133,.18),transparent 40%),
+    linear-gradient(180deg,#09040e 0%,#120718 45%,#07040b 100%);
+}
+body::before{
+  content:"";
+  position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.17;
+  background-image:
+    radial-gradient(circle at 15% 20%,#ff8b28 0 1px,transparent 2px),
+    radial-gradient(circle at 76% 38%,#a855f7 0 1px,transparent 2px),
+    radial-gradient(circle at 55% 78%,#ff8b28 0 1px,transparent 2px);
+  background-size:97px 113px,137px 151px,181px 167px;
+}
+.navbar{background:rgba(10,4,15,.9);border-bottom-color:rgba(255,122,24,.3)}
+.navbar.scrolled{box-shadow:0 8px 30px -12px rgba(255,112,22,.3)}
+.logo svg{filter:drop-shadow(0 0 9px rgba(255,112,22,.8))}
+.nav-links a:hover,.nav-links a:focus-visible{color:#ff9b38;background:rgba(255,112,22,.1)}
+.mobile-menu{background:rgba(10,4,15,.98);border-bottom-color:rgba(255,122,24,.3)}
+.mobile-menu a:hover,.mobile-menu a:focus-visible{border-color:#ff7a18;color:#ffb45e}
+.eyebrow{color:#ff9a35;text-shadow:0 0 16px rgba(255,112,22,.35)}
+.section-title .accent{color:#ff8b27;text-shadow:0 0 22px rgba(255,112,22,.55)}
+.hero{position:relative;isolation:isolate}
+.hero::before{
+  content:"🎃";position:absolute;left:clamp(0px,4vw,54px);top:25%;
+  font-size:clamp(2rem,5vw,4.5rem);opacity:.55;
+  filter:drop-shadow(0 0 18px rgba(255,91,0,.6));
+  animation:spookyBob 5s ease-in-out infinite;z-index:-1
+}
+.hero::after{
+  content:"🦇";position:absolute;right:clamp(0px,7vw,90px);top:22%;
+  font-size:clamp(2rem,5vw,4rem);opacity:.6;
+  filter:drop-shadow(0 0 15px rgba(165,80,255,.65));
+  animation:batDrift 6s ease-in-out infinite;z-index:-1
+}
+@keyframes spookyBob{0%,100%{transform:translateY(0) rotate(-7deg)}50%{transform:translateY(-15px) rotate(7deg)}}
+@keyframes batDrift{0%,100%{transform:translate(0,0) rotate(4deg)}50%{transform:translate(-12px,12px) rotate(-8deg)}}
+.hero-badge{border-color:rgba(255,122,24,.55);color:#ffb45e;background:rgba(255,112,22,.09)}
+.hero-badge .dot{background:#a7ee55;box-shadow:0 0 10px #a7ee55}
+.hero-diamond{filter:drop-shadow(0 0 34px rgba(255,112,22,.45))}
+.hero h1{text-shadow:0 0 28px rgba(255,112,22,.25)}
+.hero h1 .accent{color:#ff8b27;text-shadow:0 0 18px rgba(255,112,22,.8),0 0 50px rgba(255,112,22,.35)}
+.cursor{background:#ff8b27}
+.btn-primary,.buy,.modal-btn{background:linear-gradient(135deg,#ff7a18,#9a24d6);box-shadow:0 0 24px rgba(255,112,22,.2),0 14px 30px -12px rgba(154,36,214,.5)}
+.btn-primary:hover,.buy:hover,.modal-btn:hover{box-shadow:0 0 30px rgba(255,112,22,.35),0 20px 40px -12px rgba(154,36,214,.55)}
+.btn-ghost:hover{border-color:rgba(255,122,24,.55);color:#ffb45e}
+.stat-number{color:#ff9637;text-shadow:0 0 14px rgba(255,112,22,.4)}
+.info-banner{background:linear-gradient(90deg,rgba(139,227,74,.07),rgba(255,112,22,.07));border-color:rgba(255,122,24,.32)}
+.info-banner strong{color:#ffad4c}
+.featured{border-color:rgba(255,153,45,.5);background:linear-gradient(160deg,rgba(255,112,22,.13),rgba(130,30,170,.12) 60%,rgba(8,4,13,.9));box-shadow:0 0 44px rgba(255,112,22,.1),var(--shadow-card)}
+.featured::before{background:radial-gradient(circle,rgba(255,112,22,.22),transparent 70%)}
+.featured-diamonds{text-shadow:0 0 24px rgba(255,112,22,.42)}
+.card{background:linear-gradient(155deg,rgba(29,12,37,.92),rgba(12,7,19,.94));border-color:rgba(255,122,24,.19)}
+.card:hover{border-color:rgba(255,122,24,.65);box-shadow:0 0 28px rgba(255,112,22,.16),var(--shadow-card)}
+.card.popular{border-color:rgba(255,189,53,.7);box-shadow:0 0 26px rgba(255,112,22,.13)}
+.diamond{filter:drop-shadow(0 0 14px rgba(255,112,22,.48))}
+.price{color:#a7ee55}
+.buy{color:#fff}
+.promo-section{border-color:rgba(255,122,24,.4);background:linear-gradient(150deg,rgba(23,9,32,.97),rgba(37,10,43,.94));box-shadow:0 0 25px rgba(255,112,22,.1)}
+.promo-card{border-color:rgba(156,67,218,.42);background:rgba(10,5,17,.78)}
+.promo-card:hover{border-color:rgba(255,122,24,.55)}
+.promo-card::after{background:rgba(255,112,22,.12)}
+.promo-card h3,.ticket-box h3{color:#ff9a35}
+.ticket-box{background:#0d0613;border-color:rgba(255,122,24,.35)}
+.redeem-box{border-color:rgba(240,68,164,.38);background:rgba(20,6,25,.82)}
+.redeem-input{border-color:rgba(255,122,24,.4);background:#100716}
+.redeem-input:focus{border-color:#ff7a18;box-shadow:0 0 14px rgba(255,112,22,.2)}
+.redeem-btn{background:linear-gradient(90deg,#e83c83,#8424d6)}
+.step-number{background:linear-gradient(135deg,#ff7a18,#9025d6);box-shadow:0 0 20px rgba(255,112,22,.22)}
+.step h3,.contact h3{color:#ff9a35}
+.contact:hover{border-color:rgba(255,122,24,.5)}
+.contact button.mail{background:linear-gradient(135deg,#ff7a18,#9025d6)}
+footer{border-top-color:rgba(255,122,24,.24)}
+footer strong{color:#ff9a35}
+#toTop{border-color:rgba(255,122,24,.5);color:#ff9a35}
+#toTop:hover{box-shadow:0 0 18px rgba(255,112,22,.25)}
+.modal{background:linear-gradient(150deg,#180b22,#100817);border-color:rgba(255,122,24,.4);box-shadow:0 0 30px rgba(255,112,22,.18)}
+.order-summary{background:rgba(255,112,22,.06);border-color:rgba(255,122,24,.22)}
+.summary-value{color:#ff9a35}
+.input:focus{border-color:#ff7a18;box-shadow:0 0 14px rgba(255,112,22,.15)}
+.contact-option.active{border-color:#ff7a18;background:rgba(255,112,22,.1);box-shadow:0 0 18px rgba(255,112,22,.15)}
+.contact-option strong{color:#ff9a35}
+.payment-box{background:rgba(139,227,74,.04)}
+.accum-check{border-color:rgba(255,122,24,.3);background:rgba(255,112,22,.06)}
+.accum-check input{accent-color:#ff7a18}
+.accum-check-title{color:#ff9a35}
+.event-modal-info{background:rgba(255,112,22,.06);border-color:rgba(255,122,24,.22)}
+#toast{background:#170b20;border-color:rgba(255,122,24,.45)}
+.bot-launcher{background:linear-gradient(135deg,#ff7a18,#9025d6);box-shadow:0 8px 28px rgba(255,112,22,.25)}
+.bot-panel{border-color:rgba(255,122,24,.42);background:#100716}
+.bot-head{background:linear-gradient(120deg,rgba(255,112,22,.16),rgba(124,36,214,.22))}
+.bot-quick button{border-color:rgba(255,122,24,.35);background:rgba(255,112,22,.07)}
+.bot-input-row button{background:#ff8b27;color:#1b0911}
+::-webkit-scrollbar-thumb{background:linear-gradient(#ff7a18,#8b22d6)}
+@media(max-width:560px){
+  .hero::before{left:0;top:18%;font-size:2rem}
+  .hero::after{right:0;top:17%;font-size:2rem}
+}
+
+
+/* Fondo Halloween de Diamond Store: coloca fondo_waloween.png junto a index.html */
+body {
+  background-image: linear-gradient(rgba(8, 3, 15, 0.72), rgba(8, 3, 15, 0.84)), url('fondo_waloween.png');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
 </style>
 </head>
 
@@ -409,7 +543,7 @@ footer p{margin-top:10px;color:var(--muted);font-size:.95rem;line-height:1.6}
         </defs>
     </svg>
     <div class="loader-title">DIAMOND STORE</div>
-    <div class="loader-subtitle">Preparando tu experiencia</div>
+    <div class="loader-subtitle">Invocando la experiencia de Halloween</div>
     <div class="loader-progress"><div class="loader-bar" id="loaderBar"></div></div>
     <div class="loader-percent" id="loaderPercent">0%</div>
 </div>
@@ -465,13 +599,13 @@ footer p{margin-top:10px;color:var(--muted);font-size:.95rem;line-height:1.6}
         <defs><linearGradient id="heroGrad" x1="20" y1="5" x2="80" y2="95"><stop offset="0%" stop-color="rgba(0,229,255,.55)"/><stop offset="55%" stop-color="rgba(124,58,237,.45)"/><stop offset="100%" stop-color="rgba(0,229,255,.7)"/></linearGradient></defs>
     </svg>
 
-    <div class="hero-badge"><span class="dot"></span> PRECIOS GAMER · ATENCIÓN POR WHATSAPP</div>
+    <div class="hero-badge"><span class="dot"></span> 🎃 ESPECIAL DE HALLOWEEN · RECARGAS GAMER</div>
 
     <h1><span id="typewriter"></span><span class="cursor" aria-hidden="true"></span></h1>
 
     <p class="hero-description">
-        Consigue tus diamantes 💎 de forma sencilla y consulta nuestros paquetes y promociones acumulativas.
-        <br><strong>¡Recarga, acumula y disfruta de Free Fire!</strong>
+        La noche más aterradora también trae diamantes 💎. Explora nuestros paquetes y promociones acumulativas.
+        <br><strong>¡Recarga, acumula y disfruta de Free Fire… si te atreves! 👻</strong>
     </p>
 
     <div class="hero-buttons">
