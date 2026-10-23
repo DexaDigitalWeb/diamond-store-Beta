@@ -121,7 +121,7 @@ button{font-family:inherit}
 .logo{display:flex;align-items:center;gap:11px;text-decoration:none;font-family:var(--display);font-size:.98rem;font-weight:800;letter-spacing:2px;color:#fff;border-radius:var(--r-sm)}
 .logo svg{width:26px;height:26px;filter:drop-shadow(0 0 8px rgba(0,229,255,.7))}
 
-.nav-links{display:flex;list-style:none;gap:4px}
+.nav-links{display:flex;list-style:none;gap:4px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
 .nav-links a{display:block;padding:9px 15px;color:var(--muted);text-decoration:none;border-radius:var(--r-sm);font-weight:600;font-size:1rem;transition:color .2s,background .2s}
 .nav-links a:hover,.nav-links a:focus-visible{color:var(--cyan);background:rgba(0,229,255,.07)}
 
@@ -216,37 +216,6 @@ section{padding-top:96px}
 .saving{min-height:22px;margin-top:4px;color:var(--green);font-weight:700}
 .buy{width:100%;margin-top:18px;padding:14px;border:0;border-radius:var(--r-sm);background:linear-gradient(135deg,var(--cyan),var(--violet));color:#fff;font-family:var(--display);font-size:.82rem;font-weight:700;letter-spacing:1.5px;cursor:pointer;transition:transform .25s,box-shadow .25s}
 .buy:hover{transform:translateY(-2px);box-shadow:var(--glow-sm)}
-
-/* =========================================================
-   EVENTOS
-========================================================= */
-.events{display:grid;grid-template-columns:repeat(auto-fit,minmax(272px,1fr));gap:20px}
-.event{display:flex;flex-direction:column;padding:28px 24px;border-radius:var(--r-md);background:var(--panel);border:1px solid var(--line);text-align:center;transition:transform .3s,border-color .3s,box-shadow .3s}
-.event:hover{transform:translateY(-6px)}
-.event-easy{border-color:rgba(34,197,94,.3)}.event-easy:hover{box-shadow:0 0 26px rgba(34,197,94,.12)}
-.event-normal{border-color:var(--line-cyan)}.event-normal:hover{box-shadow:var(--glow-sm)}
-.event-pro{border-color:rgba(124,58,237,.45)}.event-pro:hover{box-shadow:0 0 26px rgba(124,58,237,.16)}
-.event-premium{border:1px solid rgba(251,191,36,.5)}.event-premium:hover{box-shadow:0 0 30px rgba(251,191,36,.14)}
-.event-tier{display:inline-block;align-self:center;padding:6px 16px;border-radius:var(--r-pill);font-family:var(--display);font-size:.7rem;font-weight:800;letter-spacing:2px;margin-bottom:14px;border:1px solid var(--line)}
-.event-easy .event-tier{color:#4ade80;border-color:rgba(34,197,94,.4);background:rgba(34,197,94,.07)}
-.event-normal .event-tier{color:var(--cyan);border-color:var(--line-cyan);background:rgba(0,229,255,.06)}
-.event-pro .event-tier{color:#c4b5fd;border-color:rgba(124,58,237,.5);background:rgba(124,58,237,.08)}
-.event-premium .event-tier{color:var(--gold);border-color:rgba(251,191,36,.5);background:rgba(251,191,36,.07)}
-.event-icon{font-size:2.6rem}
-.event h3{margin:12px 0 8px;font-family:var(--display);font-size:1rem;letter-spacing:1px;color:#fff}
-.event > p{color:var(--muted);line-height:1.55}
-.event > p strong{color:var(--text)}
-.event-data{display:flex;flex-direction:column;gap:8px;margin:18px 0;text-align:left}
-.event-data span{padding:10px 12px;border-radius:var(--r-sm);background:rgba(0,0,0,.22);color:var(--muted);font-size:.98rem}
-.event-data strong{color:#fff}
-.event-special-rule{margin:4px 0 16px;padding:12px 14px;border-left:3px solid var(--gold);border-radius:var(--r-sm);background:rgba(251,191,36,.06);color:var(--muted);font-size:.9rem;line-height:1.5;text-align:left}
-.event-btn{margin-top:auto;width:100%;padding:14px;border:0;border-radius:var(--r-sm);background:linear-gradient(135deg,var(--cyan),var(--violet));color:#fff;font-family:var(--display);font-size:.82rem;font-weight:800;letter-spacing:1.5px;cursor:pointer;transition:transform .25s,box-shadow .25s}
-.event-btn:hover{transform:translateY(-2px);box-shadow:var(--glow-sm)}
-.event-rules{max-width:920px;margin:28px auto 0;padding:26px;border:1px solid var(--line);border-radius:var(--r-md);background:rgba(255,255,255,.02)}
-.event-rules h3{font-family:var(--display);font-size:.95rem;letter-spacing:1.5px;color:var(--cyan);margin-bottom:14px}
-.event-rules ul{list-style:none;color:var(--muted);line-height:1.9}
-.event-rules li{padding-left:22px;position:relative}
-.event-rules li::before{content:'◆';position:absolute;left:0;color:var(--cyan);font-size:.7rem;top:3px}
 
 /* =========================================================
    PROMOCIONES ACUMULATIVAS
@@ -460,8 +429,7 @@ footer p{margin-top:10px;color:var(--muted);font-size:.95rem;line-height:1.6}
         <ul class="nav-links">
             <li><a href="#inicio">Inicio</a></li>
             <li><a href="#diamantes">Diamantes</a></li>
-            <li><a href="#eventos">Eventos</a></li>
-            <li><a href="#promociones">Promos</a></li>
+            <li><a href="#promociones">Acumulativas</a></li>
             <li><a href="#como-funciona">Ayuda</a></li>
             <li><a href="comentarios.html">💬 Comentarios</a></li>
         </ul>
@@ -472,8 +440,7 @@ footer p{margin-top:10px;color:var(--muted);font-size:.95rem;line-height:1.6}
     <div class="mobile-menu" id="mobileMenu">
         <a href="#inicio">🏠 Inicio</a>
         <a href="#diamantes">💎 Diamantes</a>
-        <a href="#eventos">🏆 Eventos</a>
-        <a href="#promociones">🎁 Promos</a>
+        <a href="#promociones">🎁 Acumulativas</a>
         <a href="#como-funciona">❓ Ayuda</a>
         <a href="comentarios.html">💬 Comentarios</a>
     </div>
@@ -503,13 +470,13 @@ footer p{margin-top:10px;color:var(--muted);font-size:.95rem;line-height:1.6}
     <h1><span id="typewriter"></span><span class="cursor" aria-hidden="true"></span></h1>
 
     <p class="hero-description">
-        Consigue tus diamantes 💎 de forma rápida, sencilla y a precios competitivos.
-        <br><strong>¡Ahorra y mantente pendiente de nuestros eventos!</strong>
+        Consigue tus diamantes 💎 de forma sencilla y consulta nuestros paquetes y promociones acumulativas.
+        <br><strong>¡Recarga, acumula y disfruta de Free Fire!</strong>
     </p>
 
     <div class="hero-buttons">
         <button class="btn btn-primary" onclick="scrollToPackages()">💎 VER DIAMANTES</button>
-        <button class="btn btn-ghost" onclick="scrollToEvents()">🏆 VER EVENTOS</button>
+        <button class="btn btn-ghost" onclick="document.getElementById('promociones').scrollIntoView({behavior:'smooth'})">🎁 VER ACUMULATIVAS</button>
     </div>
 
     <div class="stats">
@@ -548,9 +515,9 @@ footer p{margin-top:10px;color:var(--muted);font-size:.95rem;line-height:1.6}
         <h3>PAQUETE FAVORITO</h3>
         <div class="featured-diamonds">💎 <span class="accent">500</span> DIAMANTES</div>
         <div class="old-price">Precio de referencia: $20.000 COP</div>
-        <div class="featured-price">$17.000 COP</div>
-        <div class="save">💰 Ahorras $3.000 COP</div>
-        <button class="btn btn-primary" onclick="openModal(500,17000,3000,20000)">COMPRAR 500 💎</button>
+        <div class="featured-price">$17.500 COP</div>
+        <div class="save">💰 Ahorras $1.400 COP</div>
+        <button class="btn btn-primary" onclick="openModal(500,17500,1400,20000)">COMPRAR 500 💎</button>
     </div>
 </section>
 
@@ -562,78 +529,7 @@ footer p{margin-top:10px;color:var(--muted);font-size:.95rem;line-height:1.6}
     <div class="packages" id="packages"></div>
 </section>
 
-<!-- EVENTS -->
-<section id="eventos" class="reveal">
-    <span class="eyebrow">Competencia</span>
-    <h2 class="section-title">🏆 GRAN EVENTO DE <span class="accent">DIAMANTES</span></h2>
-    <p class="section-subtitle">Elige tu nivel, reúne a tu equipo y participa en un PVP. La inscripción indicada es el valor total por jugador o equipo, según la modalidad.</p>
-
-    <div class="events">
-        <div class="event event-easy">
-            <div class="event-tier">🟢 EASY</div>
-            <div class="event-icon">♦️</div>
-            <h3>GRAN EVENTO DE DIAMANTES</h3>
-            <p><strong>2V2</strong><br>Tú y tu dúo se enfrentan a otro equipo.</p>
-            <div class="event-data">
-                <span>💰 Inscripción: <strong>$17.000 COP / equipo</strong></span>
-                <span>🏆 Premio: <strong>1.000 💎 al equipo ganador</strong></span>
-                <span>⚔️ Formato: <strong>2 equipos • 2V2</strong></span>
-            </div>
-            <p class="event-special-rule">📜 Fase final: el equipo ganador avanza a un 1V1 entre sus 2 integrantes. Quien gane ese duelo será la única persona ganadora y recibirá el premio.</p>
-            <button class="event-btn" onclick="openEventModal('EASY','2V2','$17.000 COP por equipo','1.000 💎','Tú y tu dúo podrían llevarse 1.000 DIAMANTES si ganan el PVP contra otro equipo.')">🏆 INSCRIBIRME</button>
-        </div>
-        <div class="event event-normal">
-            <div class="event-tier">🔵 NORMAL</div>
-            <div class="event-icon">⚔️</div>
-            <h3>DIAMOND BATTLE</h3>
-            <p><strong>1V1</strong><br>Enfrentamiento individual por diamantes.</p>
-            <div class="event-data">
-                <span>💰 Inscripción: <strong>$10.000 COP / jugador</strong></span>
-                <span>🏆 Premio: <strong>500 💎 al ganador</strong></span>
-                <span>⚔️ Formato: <strong>1V1 • 2 jugadores</strong></span>
-            </div>
-            <p class="event-special-rule">📜 Fase final: al ser un 1V1, quien gane el enfrentamiento será la única persona ganadora y recibirá el premio.</p>
-            <button class="event-btn" onclick="openEventModal('NORMAL','1V1','$10.000 COP por jugador','500 💎','Enfrentamiento individual. El ganador recibe 500 DIAMANTES.')">⚔️ INSCRIBIRME</button>
-        </div>
-        <div class="event event-pro">
-            <div class="event-tier">🟣 PRO</div>
-            <div class="event-icon">🔥</div>
-            <h3>PRO DIAMOND WAR</h3>
-            <p><strong>4V4</strong><br>Forma tu escuadra y enfréntate a otro equipo.</p>
-            <div class="event-data">
-                <span>💰 Inscripción: <strong>$42.000 COP / equipo</strong></span>
-                <span>🏆 Premio: <strong>2.500 💎 al equipo ganador</strong></span>
-                <span>⚔️ Formato: <strong>2 equipos • 4V4</strong></span>
-            </div>
-            <p class="event-special-rule">📜 Fase final: el equipo ganador avanza a un 2V2 entre sus 4 integrantes. Los 2 jugadores que ganen pasan a un 1V1 final. Quien gane será la única persona ganadora y recibirá el premio.</p>
-            <button class="event-btn" onclick="openEventModal('PRO','4V4','$42.000 COP por equipo','2.500 💎','Forma tu escuadra de 4 jugadores y compite por 2.500 DIAMANTES.')">🔥 INSCRIBIRME</button>
-        </div>
-        <div class="event event-premium">
-            <div class="event-tier">👑 PREMIUM</div>
-            <div class="event-icon">💎</div>
-            <h3>DIAMOND CHAMPIONS</h3>
-            <p><strong>8V8</strong><br>El gran enfrentamiento por un premio mayor.</p>
-            <div class="event-data">
-                <span>💰 Inscripción: <strong>$78.000 COP / equipo</strong></span>
-                <span>🏆 Premio: <strong>5.000 💎 al equipo ganador</strong></span>
-                <span>⚔️ Formato: <strong>2 equipos • 8V8</strong></span>
-            </div>
-            <p class="event-special-rule">📜 Fase final: el equipo ganador avanza a un 4V4 entre sus 8 integrantes. Los 4 jugadores que ganen pasan a un 2V2; los 2 ganadores disputan un 1V1 final. Quien gane será la única persona ganadora y recibirá el premio.</p>
-            <button class="event-btn" onclick="openEventModal('PREMIUM','8V8','$78.000 COP por equipo','5.000 💎','El gran PVP 8V8. El equipo ganador recibe 5.000 DIAMANTES.')">👑 INSCRIBIRME</button>
-        </div>
-    </div>
-
-    <div class="event-rules">
-        <h3>📜 REGLAS BÁSICAS DEL EVENTO</h3>
-        <ul>
-            <li>El pago de inscripción debe confirmarse antes de participar.</li>
-            <li>El equipo debe estar completo según la modalidad elegida.</li>
-            <li>El premio se entrega después de verificar el resultado del PVP.</li>
-            <li>En las modalidades por equipos, el equipo ganador avanza a rondas eliminatorias entre sus integrantes: 8V8 → 4V4 → 2V2 → 1V1; 4V4 → 2V2 → 1V1; 2V2 → 1V1. Solo quien gane el 1V1 final recibe el premio.</li>
-            <li>Las fechas, horarios, sala y reglas específicas se informarán por WhatsApp.</li>
-        </ul>
-    </div>
-</section>
+<!-- Sección de competencias por diamantes eliminada a petición del propietario. -->
 
 <!-- ACCUMULATIVE PROMOTIONS -->
 <section id="promociones" class="promo-section reveal">
@@ -741,35 +637,6 @@ footer p{margin-top:10px;color:var(--muted);font-size:.95rem;line-height:1.6}
 <button id="toTop" aria-label="Volver arriba" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 <div id="toast" role="alert"></div>
 
-<!-- EVENT REGISTRATION MODAL -->
-<div class="overlay" id="eventOverlay">
-    <div class="modal">
-        <button class="close" onclick="closeEventModal()" aria-label="Cerrar">✕</button>
-        <div class="modal-title">🏆 INSCRIPCIÓN AL EVENTO</div>
-        <div class="event-modal-info">
-            <p>🎮 Nivel: <strong id="eventModalTier">--</strong></p>
-            <p>⚔️ Modalidad: <strong id="eventModalMode">--</strong></p>
-            <p>💰 Inscripción: <strong id="eventModalPrice">--</strong></p>
-            <p>💎 Premio: <strong id="eventModalPrize">--</strong></p>
-            <p id="eventModalDescription">--</p>
-        </div>
-        <div class="input-group">
-            <label for="eventName">👤 NOMBRE DEL CAPITÁN / JUGADOR</label>
-            <input id="eventName" class="input" type="text" maxlength="40" placeholder="Escribe tu nombre">
-        </div>
-        <div class="input-group">
-            <label for="eventPlayerId">🆔 ID DEL JUGADOR / CAPITÁN</label>
-            <input id="eventPlayerId" class="input" type="text" maxlength="20" placeholder="Ej: 123456789">
-        </div>
-        <div class="input-group">
-            <label for="eventTeam">👥 NOMBRE DEL EQUIPO</label>
-            <input id="eventTeam" class="input" type="text" maxlength="35" placeholder="Ej: DEXA SQUAD">
-        </div>
-        <label class="checkbox-row"><input type="checkbox" id="eventPaymentCheck"><span>Confirmo que revisaré los datos de inscripción y realizaré el pago indicado antes de enviar la solicitud.</span></label>
-        <button class="modal-btn" onclick="sendEventRegistration()">🚀 ENVIAR INSCRIPCIÓN POR WHATSAPP</button>
-    </div>
-</div>
-
 <!-- ORDER MODAL -->
 <div class="overlay" id="overlay">
     <div class="modal">
@@ -863,11 +730,11 @@ footer p{margin-top:10px;color:var(--muted);font-size:.95rem;line-height:1.6}
 ========================================================= */
 const packages = [
     {diamonds:100, price:3500, reference:4200},
-    {diamonds:300, price:11000, reference:12000},
-    {diamonds:500, price:17000, reference:20000, popular:true},
-    {diamonds:1000, price:34000, reference:38600},
-    {diamonds:2000, price:65000, reference:76000},
-    {diamonds:5000, price:170000, reference:184000}
+    {diamonds:300, price:10500, reference:12000},
+    {diamonds:500, price:17500, reference:20000, popular:true},
+    {diamonds:1000, price:35000, reference:38600},
+    {diamonds:2000, price:70000, reference:79600},
+    {diamonds:5000, price:175000, reference:182400}
 ];
 
 let currentPackage = null;
@@ -1511,46 +1378,9 @@ function openEmail(){
 }
 
 /* =========================================================
-   EVENT REGISTRATION
-========================================================= */
-let selectedEvent = {tier:'', mode:'', price:'', prize:'', description:''};
-function openEventModal(tier, mode, price, prize, description){
-    selectedEvent = {tier, mode, price, prize, description};
-    document.getElementById('eventModalTier').textContent = tier;
-    document.getElementById('eventModalMode').textContent = mode;
-    document.getElementById('eventModalPrice').textContent = price;
-    document.getElementById('eventModalPrize').textContent = prize;
-    document.getElementById('eventModalDescription').textContent = description;
-    document.getElementById('eventName').value = '';
-    document.getElementById('eventPlayerId').value = '';
-    document.getElementById('eventTeam').value = '';
-    document.getElementById('eventPaymentCheck').checked = false;
-    document.getElementById('eventOverlay').classList.add('active');
-    document.body.style.overflow = 'hidden';
-    playConfirm();
-}
-function closeEventModal(){
-    document.getElementById('eventOverlay').classList.remove('active');
-    document.body.style.overflow = '';
-}
-function sendEventRegistration(){
-    const name = document.getElementById('eventName').value.trim();
-    const playerId = document.getElementById('eventPlayerId').value.trim();
-    const team = document.getElementById('eventTeam').value.trim();
-    const checked = document.getElementById('eventPaymentCheck').checked;
-    if(!name || !playerId){ toast('⚠️ Completa tu nombre y tu ID de jugador.'); return; }
-    if(!checked){ toast('⚠️ Confirma la casilla antes de enviar la inscripción.'); return; }
-    const message = `🏆💎 *INSCRIPCIÓN A EVENTO - DIAMOND STORE* 💎🏆\n\n🔥 *NIVEL:* ${selectedEvent.tier}\n⚔️ *MODALIDAD:* ${selectedEvent.mode}\n💰 *INSCRIPCIÓN:* ${selectedEvent.price}\n🏆 *PREMIO:* ${selectedEvent.prize}\n\n👤 *CAPITÁN / JUGADOR:*\n${name}\n\n🆔 *ID:*\n${playerId}\n\n👥 *EQUIPO:*\n${team || 'Por confirmar'}\n\n📋 *DETALLE:*\n${selectedEvent.description}\n\n💳 Realizaré el pago de inscripción y enviaré el comprobante por este WhatsApp.\n\n🎮💎 *DIAMOND STORE*`;
-    window.open('https://wa.me/573001805830?text='+encodeURIComponent(message), '_blank');
-    playSuccess();
-    closeEventModal();
-}
-
-/* =========================================================
    NAVIGATION
 ========================================================= */
 function scrollToPackages(){ document.getElementById('diamantes').scrollIntoView({behavior:'smooth'}); }
-function scrollToEvents(){ document.getElementById('eventos').scrollIntoView({behavior:'smooth'}); }
 
 /* Menú móvil */
 const menuToggle = document.getElementById('menuToggle');
@@ -1576,12 +1406,11 @@ window.addEventListener('scroll', ()=>{
 }, {passive:true});
 
 /* Cerrar modal al hacer clic fuera */
-document.getElementById('eventOverlay').addEventListener('click', function(e){ if(e.target === this) closeEventModal(); });
 document.getElementById('overlay').addEventListener('click', function(e){ if(e.target === this) closeModal(); });
 
 /* ESC */
 document.addEventListener('keydown', e=>{
-    if(e.key === 'Escape'){ closeModal(); closeEventModal(); }
+    if(e.key === 'Escape'){ closeModal(); }
 });
 
 /* =========================================================
