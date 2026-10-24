@@ -52,11 +52,17 @@ html{scroll-behavior:smooth;scroll-padding-top:84px}
 
 body{
     min-height:100vh;
-    background:
+    background-color:var(--bg);
+    background-image:
+        linear-gradient(rgba(4,3,14,.48),rgba(4,3,14,.68)),
+        url('./fondo_waloween.png'),
         radial-gradient(900px 600px at 12% -5%,rgba(124,58,237,.16),transparent 60%),
         radial-gradient(900px 600px at 88% 15%,rgba(0,229,255,.10),transparent 60%),
-        radial-gradient(700px 500px at 50% 110%,rgba(236,72,153,.08),transparent 60%),
-        var(--bg);
+        radial-gradient(700px 500px at 50% 110%,rgba(236,72,153,.08),transparent 60%);
+    background-size:cover,cover,auto,auto,auto;
+    background-position:center,center,center,center,center;
+    background-repeat:no-repeat,no-repeat,no-repeat,no-repeat,no-repeat;
+    background-attachment:scroll,scroll,scroll,scroll,scroll;
     color:var(--text);
     font-family:var(--body);
     font-size:1.05rem;
@@ -581,22 +587,6 @@ body{
     .halloween-fog,.hw-float,.bat,.hw-spider,.hw-marquee-track,.featured::after,.hero-badge{animation:none!important}
 }
 
-/* Fondo WALOOWEEN: sube fondo_waloween.png a la misma carpeta que index.html */
-html { min-height: 100%; background-color: #080611; }
-body {
-    min-height: 100vh;
-    background-color: #080611;
-    background-image:
-        linear-gradient(rgba(4, 3, 14, .48), rgba(4, 3, 14, .68)),
-        url("./fondo_waloween.png");
-    background-size: cover, cover;
-    background-position: center center, center center;
-    background-repeat: no-repeat, no-repeat;
-    background-attachment: scroll, scroll;
-}
-@media (min-width: 768px) {
-    body { background-attachment: scroll, fixed; }
-}
 </style>
 </head>
 
