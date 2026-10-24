@@ -393,322 +393,207 @@ footer p{margin-top:10px;color:var(--muted);font-size:.95rem;line-height:1.6}
 }
 
 /* =========================================================
-   TEMA ESPECIAL HALLOWEEN — conserva las funciones originales
+   🎃 WALOOWEEN 2.0 — EXPERIENCIA DE MIEDO PREMIUM
 ========================================================= */
 :root{
-  --bg:#08040d;
-  --bg-2:#120719;
-  --panel:rgba(24,10,31,.88);
-  --line:rgba(255,128,30,.22);
-  --line-cyan:rgba(255,112,22,.42);
-  --cyan:#ff7a18;
-  --violet:#8b22d6;
-  --magenta:#f044a4;
-  --green:#8be34a;
-  --gold:#ffbd35;
-  --red:#ff4c35;
-  --text:#fff4e8;
-  --muted:#c7adc9;
-  --shadow-card:0 18px 45px -18px rgba(0,0,0,.8);
-  --glow-sm:0 0 18px rgba(255,112,22,.25);
-  --glow-md:0 0 30px rgba(255,112,22,.34);
-  --glow-lg:0 0 44px rgba(255,112,22,.4);
+    --hw-orange:#ff7a18;
+    --hw-amber:#ffb02e;
+    --hw-purple:#9b5cff;
+    --hw-green:#b6ff4d;
+    --hw-deep:#170a2b;
 }
+@property --hw-spin{syntax:'<angle>';initial-value:0deg;inherits:false;}
+
 body{
-  background:
-    radial-gradient(ellipse at 50% 0%,rgba(111,22,144,.32),transparent 46%),
-    radial-gradient(ellipse at 10% 28%,rgba(255,91,0,.13),transparent 38%),
-    radial-gradient(ellipse at 90% 58%,rgba(105,23,133,.18),transparent 40%),
-    linear-gradient(180deg,#09040e 0%,#120718 45%,#07040b 100%);
+    background:
+        radial-gradient(ellipse at 10% 12%,rgba(255,92,0,.15),transparent 38%),
+        radial-gradient(ellipse at 90% 22%,rgba(124,58,237,.22),transparent 42%),
+        radial-gradient(ellipse at 50% 100%,rgba(255,122,24,.10),transparent 45%),
+        var(--bg);
 }
-body::before{
-  content:"";
-  position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.17;
-  background-image:
-    radial-gradient(circle at 15% 20%,#ff8b28 0 1px,transparent 2px),
-    radial-gradient(circle at 76% 38%,#a855f7 0 1px,transparent 2px),
-    radial-gradient(circle at 55% 78%,#ff8b28 0 1px,transparent 2px);
-  background-size:97px 113px,137px 151px,181px 167px;
+
+/* ---- NIEEBLA MULTICAPA ---- */
+.halloween-fog{
+    position:fixed;left:-10%;width:120%;height:42vh;z-index:2;pointer-events:none;
+    border-radius:50%;filter:blur(58px);
 }
-.navbar{background:rgba(10,4,15,.9);border-bottom-color:rgba(255,122,24,.3)}
-.navbar.scrolled{box-shadow:0 8px 30px -12px rgba(255,112,22,.3)}
-.logo svg{filter:drop-shadow(0 0 9px rgba(255,112,22,.8))}
-.nav-links a:hover,.nav-links a:focus-visible{color:#ff9b38;background:rgba(255,112,22,.1)}
-.mobile-menu{background:rgba(10,4,15,.98);border-bottom-color:rgba(255,122,24,.3)}
-.mobile-menu a:hover,.mobile-menu a:focus-visible{border-color:#ff7a18;color:#ffb45e}
-.eyebrow{color:#ff9a35;text-shadow:0 0 16px rgba(255,112,22,.35)}
-.section-title .accent{color:#ff8b27;text-shadow:0 0 22px rgba(255,112,22,.55)}
-.hero{position:relative;isolation:isolate}
-.hero::before{
-  content:"🎃";position:absolute;left:clamp(0px,4vw,54px);top:25%;
-  font-size:clamp(2rem,5vw,4.5rem);opacity:.55;
-  filter:drop-shadow(0 0 18px rgba(255,91,0,.6));
-  animation:spookyBob 5s ease-in-out infinite;z-index:-1
+.halloween-fog.fog-1{top:6%;  background:radial-gradient(ellipse at center,rgba(124,58,237,.11),transparent 65%);animation:fogDrift 17s ease-in-out infinite alternate;}
+.halloween-fog.fog-2{top:44%; background:radial-gradient(ellipse at center,rgba(255,122,24,.08),transparent 65%);animation:fogDrift 22s ease-in-out infinite alternate-reverse;}
+.halloween-fog.fog-3{top:76%; background:radial-gradient(ellipse at center,rgba(155,92,255,.10),transparent 65%);animation:fogDrift 27s ease-in-out infinite alternate;}
+@keyframes fogDrift{
+    from{transform:translateX(-5%) scaleY(1);opacity:.55}
+    to{transform:translateX(5%) scaleY(1.18);opacity:1}
 }
-.hero::after{
-  content:"🦇";position:absolute;right:clamp(0px,7vw,90px);top:22%;
-  font-size:clamp(2rem,5vw,4rem);opacity:.6;
-  filter:drop-shadow(0 0 15px rgba(165,80,255,.65));
-  animation:batDrift 6s ease-in-out infinite;z-index:-1
+
+/* ---- DECORACIONES FLOTANTES ---- */
+.hw-float{
+    position:fixed;z-index:3;pointer-events:none;user-select:none;
+    font-size:clamp(24px,3vw,38px);
+    filter:drop-shadow(0 0 16px rgba(255,122,24,.5));
+    animation:hwFloaty 6s ease-in-out infinite;
 }
-@keyframes spookyBob{0%,100%{transform:translateY(0) rotate(-7deg)}50%{transform:translateY(-15px) rotate(7deg)}}
-@keyframes batDrift{0%,100%{transform:translate(0,0) rotate(4deg)}50%{transform:translate(-12px,12px) rotate(-8deg)}}
-.hero-badge{border-color:rgba(255,122,24,.55);color:#ffb45e;background:rgba(255,112,22,.09)}
-.hero-badge .dot{background:#a7ee55;box-shadow:0 0 10px #a7ee55}
-.hero-diamond{filter:drop-shadow(0 0 34px rgba(255,112,22,.45))}
-.hero h1{text-shadow:0 0 28px rgba(255,112,22,.25)}
-.hero h1 .accent{color:#ff8b27;text-shadow:0 0 18px rgba(255,112,22,.8),0 0 50px rgba(255,112,22,.35)}
-.cursor{background:#ff8b27}
-.btn-primary,.buy,.modal-btn{background:linear-gradient(135deg,#ff7a18,#9a24d6);box-shadow:0 0 24px rgba(255,112,22,.2),0 14px 30px -12px rgba(154,36,214,.5)}
-.btn-primary:hover,.buy:hover,.modal-btn:hover{box-shadow:0 0 30px rgba(255,112,22,.35),0 20px 40px -12px rgba(154,36,214,.55)}
-.btn-ghost:hover{border-color:rgba(255,122,24,.55);color:#ffb45e}
-.stat-number{color:#ff9637;text-shadow:0 0 14px rgba(255,112,22,.4)}
-.info-banner{background:linear-gradient(90deg,rgba(139,227,74,.07),rgba(255,112,22,.07));border-color:rgba(255,122,24,.32)}
-.info-banner strong{color:#ffad4c}
-.featured{border-color:rgba(255,153,45,.5);background:linear-gradient(160deg,rgba(255,112,22,.13),rgba(130,30,170,.12) 60%,rgba(8,4,13,.9));box-shadow:0 0 44px rgba(255,112,22,.1),var(--shadow-card)}
-.featured::before{background:radial-gradient(circle,rgba(255,112,22,.22),transparent 70%)}
-.featured-diamonds{text-shadow:0 0 24px rgba(255,112,22,.42)}
-.card{background:linear-gradient(155deg,rgba(29,12,37,.92),rgba(12,7,19,.94));border-color:rgba(255,122,24,.19)}
-.card:hover{border-color:rgba(255,122,24,.65);box-shadow:0 0 28px rgba(255,112,22,.16),var(--shadow-card)}
-.card.popular{border-color:rgba(255,189,53,.7);box-shadow:0 0 26px rgba(255,112,22,.13)}
-.diamond{filter:drop-shadow(0 0 14px rgba(255,112,22,.48))}
-.price{color:#a7ee55}
-.buy{color:#fff}
-.promo-section{border-color:rgba(255,122,24,.4);background:linear-gradient(150deg,rgba(23,9,32,.97),rgba(37,10,43,.94));box-shadow:0 0 25px rgba(255,112,22,.1)}
-.promo-card{border-color:rgba(156,67,218,.42);background:rgba(10,5,17,.78)}
-.promo-card:hover{border-color:rgba(255,122,24,.55)}
-.promo-card::after{background:rgba(255,112,22,.12)}
-.promo-card h3,.ticket-box h3{color:#ff9a35}
-.ticket-box{background:#0d0613;border-color:rgba(255,122,24,.35)}
-.redeem-box{border-color:rgba(240,68,164,.38);background:rgba(20,6,25,.82)}
-.redeem-input{border-color:rgba(255,122,24,.4);background:#100716}
-.redeem-input:focus{border-color:#ff7a18;box-shadow:0 0 14px rgba(255,112,22,.2)}
-.redeem-btn{background:linear-gradient(90deg,#e83c83,#8424d6)}
-.step-number{background:linear-gradient(135deg,#ff7a18,#9025d6);box-shadow:0 0 20px rgba(255,112,22,.22)}
-.step h3,.contact h3{color:#ff9a35}
-.contact:hover{border-color:rgba(255,122,24,.5)}
-.contact button.mail{background:linear-gradient(135deg,#ff7a18,#9025d6)}
-footer{border-top-color:rgba(255,122,24,.24)}
-footer strong{color:#ff9a35}
-#toTop{border-color:rgba(255,122,24,.5);color:#ff9a35}
-#toTop:hover{box-shadow:0 0 18px rgba(255,112,22,.25)}
-.modal{background:linear-gradient(150deg,#180b22,#100817);border-color:rgba(255,122,24,.4);box-shadow:0 0 30px rgba(255,112,22,.18)}
-.order-summary{background:rgba(255,112,22,.06);border-color:rgba(255,122,24,.22)}
-.summary-value{color:#ff9a35}
-.input:focus{border-color:#ff7a18;box-shadow:0 0 14px rgba(255,112,22,.15)}
-.contact-option.active{border-color:#ff7a18;background:rgba(255,112,22,.1);box-shadow:0 0 18px rgba(255,112,22,.15)}
-.contact-option strong{color:#ff9a35}
-.payment-box{background:rgba(139,227,74,.04)}
-.accum-check{border-color:rgba(255,122,24,.3);background:rgba(255,112,22,.06)}
-.accum-check input{accent-color:#ff7a18}
-.accum-check-title{color:#ff9a35}
-.event-modal-info{background:rgba(255,112,22,.06);border-color:rgba(255,122,24,.22)}
-#toast{background:#170b20;border-color:rgba(255,122,24,.45)}
-.bot-launcher{background:linear-gradient(135deg,#ff7a18,#9025d6);box-shadow:0 8px 28px rgba(255,112,22,.25)}
-.bot-panel{border-color:rgba(255,122,24,.42);background:#100716}
-.bot-head{background:linear-gradient(120deg,rgba(255,112,22,.16),rgba(124,36,214,.22))}
-.bot-quick button{border-color:rgba(255,122,24,.35);background:rgba(255,112,22,.07)}
-.bot-input-row button{background:#ff8b27;color:#1b0911}
-::-webkit-scrollbar-thumb{background:linear-gradient(#ff7a18,#8b22d6)}
+.hw-float.pumpkin{top:20%;left:3%;}
+.hw-float.ghost{top:44%;right:3%;font-size:clamp(26px,3.4vw,42px);animation-delay:-2s;filter:drop-shadow(0 0 18px rgba(200,220,255,.45));}
+.hw-float.skull{top:70%;left:4%;animation-delay:-4s;}
+.hw-float.candle{top:64%;right:4.5%;font-size:clamp(20px,2.6vw,30px);animation-delay:-1s;}
+@keyframes hwFloaty{
+    0%,100%{transform:translateY(0) rotate(-8deg)}
+    50%{transform:translateY(-20px) rotate(8deg)}
+}
+
+/* ---- MURCIÉLAGOS ---- */
+.hw-bats{position:fixed;inset:0;z-index:3;pointer-events:none;overflow:hidden;}
+.bat{
+    position:absolute;left:-70px;
+    font-size:clamp(18px,2.6vw,30px);
+    filter:drop-shadow(0 0 10px rgba(0,0,0,.8)) drop-shadow(0 0 6px rgba(155,92,255,.35));
+    animation:batFly linear infinite;
+}
+.bat.b1{top:14%;animation-duration:15s;}
+.bat.b2{top:24%;animation-duration:20s;animation-delay:5s;font-size:20px;}
+.bat.b3{top:8%; animation-duration:24s;animation-delay:11s;font-size:32px;}
+@keyframes batFly{
+    0%  {transform:translate(0,0) rotate(0) scaleY(1)}
+    20% {transform:translate(24vw,-5vh) rotate(7deg) scaleY(.82)}
+    40% {transform:translate(48vw,4vh) rotate(-7deg) scaleY(1)}
+    60% {transform:translate(70vw,-4vh) rotate(6deg) scaleY(.82)}
+    80% {transform:translate(92vw,3vh) rotate(-4deg) scaleY(1)}
+    100%{transform:translate(118vw,0) rotate(0) scaleY(1)}
+}
+
+/* ---- ARAÑA COLGANDO ---- */
+.hw-spider{
+    position:fixed;top:0;right:9%;z-index:3;pointer-events:none;
+    transform-origin:top center;animation:spiderSwing 5.5s ease-in-out infinite;
+    display:flex;flex-direction:column;align-items:center;
+}
+.hw-spider .string{
+    width:1px;height:64px;
+    background:linear-gradient(rgba(255,255,255,.55),rgba(255,255,255,.15));
+}
+.hw-spider .body{font-size:32px;filter:drop-shadow(0 0 10px rgba(155,92,255,.55));}
+@keyframes spiderSwing{
+    0%,100%{transform:rotate(-7deg)}
+    50%{transform:rotate(7deg)}
+}
+
+/* ---- MARQUEE DE MIEDO ---- */
+.hw-marquee{
+    position:relative;z-index:1;margin:26px auto 6px;max-width:1180px;
+    padding:14px 0;overflow:hidden;
+    border-top:1px solid rgba(255,150,60,.4);
+    border-bottom:1px solid rgba(255,150,60,.4);
+    background:linear-gradient(90deg,rgba(255,122,24,.12),rgba(155,92,255,.12),rgba(255,122,24,.12));
+    transform:rotate(-1.1deg);
+    box-shadow:0 0 34px rgba(255,122,24,.14);
+}
+.hw-marquee-track{
+    display:flex;gap:52px;width:max-content;white-space:nowrap;
+    font-family:var(--display);font-weight:800;font-size:.95rem;letter-spacing:3px;
+    color:var(--hw-amber);text-shadow:0 0 14px rgba(255,122,24,.6);
+    animation:marqueeScroll 24s linear infinite;
+}
+@keyframes marqueeScroll{to{transform:translateX(-50%)}}
+
+/* ---- HERO ---- */
+.hero-badge{
+    border-color:rgba(255,150,60,.6);color:#ffc98a;
+    background:linear-gradient(90deg,rgba(255,122,24,.14),rgba(155,92,255,.14));
+    box-shadow:0 0 26px rgba(255,122,24,.14),inset 0 0 18px rgba(255,122,24,.06);
+    animation:badgeGlow 3.2s ease-in-out infinite;
+}
+@keyframes badgeGlow{
+    50%{box-shadow:0 0 42px rgba(255,122,24,.30),inset 0 0 22px rgba(255,122,24,.12)}
+}
+.hero-badge .dot{background:var(--hw-orange);box-shadow:0 0 12px var(--hw-orange);}
+.hero h1 .accent,.section-title .accent{
+    background:linear-gradient(120deg,var(--hw-amber),var(--hw-orange) 45%,var(--hw-purple));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 0 18px rgba(255,122,24,.45));
+}
+.hero-diamond,.loader-diamond{
+    filter:drop-shadow(0 0 26px rgba(255,122,24,.42)) drop-shadow(0 0 24px rgba(155,92,255,.4));
+}
+.loader-title{color:var(--hw-amber);text-shadow:0 0 20px rgba(255,122,24,.65);}
+.loader-bar{background:linear-gradient(90deg,var(--hw-orange),var(--hw-purple));box-shadow:0 0 16px var(--hw-orange);}
+.cursor{background:var(--hw-amber);}
+
+/* ---- BOTONES: gradiente + shine ---- */
+.btn-primary,.buy,.modal-btn{
+    position:relative;overflow:hidden;
+    background:linear-gradient(135deg,#ff8a2a,var(--hw-purple));
+}
+.btn-primary::after,.buy::after,.modal-btn::after{
+    content:'';position:absolute;top:0;left:-70%;width:45%;height:100%;
+    background:linear-gradient(105deg,transparent,rgba(255,255,255,.38),transparent);
+    transform:skewX(-20deg);transition:left .55s ease;
+}
+.btn-primary:hover::after,.buy:hover::after,.modal-btn:hover::after{left:135%;}
+.navbar.scrolled{box-shadow:0 8px 30px -12px rgba(255,122,24,.25);}
+
+/* ---- PAQUETE DESTACADO: anillo giratorio ---- */
+.featured{
+    border:1px solid rgba(255,140,40,.5);
+    background:linear-gradient(160deg,rgba(255,122,24,.11),rgba(155,92,255,.07) 55%,rgba(0,229,255,.04));
+    box-shadow:0 0 46px rgba(255,122,24,.12),var(--shadow-card);
+}
+.featured::after{
+    content:'';position:absolute;inset:-2px;border-radius:inherit;padding:2px;z-index:0;
+    background:conic-gradient(from var(--hw-spin),transparent 0 62%,rgba(255,150,50,.95) 78%,rgba(155,92,255,.95) 90%,transparent 100%);
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;
+    animation:hwSpin 4.5s linear infinite;pointer-events:none;
+}
+.featured > *{position:relative;z-index:1;}
+@keyframes hwSpin{to{--hw-spin:360deg}}
+.featured-badge{background:linear-gradient(90deg,var(--hw-orange),var(--hw-purple));color:#fff;box-shadow:0 0 18px rgba(255,122,24,.4);}
+.featured h3{color:var(--hw-amber);}
+.featured-diamonds .accent{color:var(--hw-amber);text-shadow:0 0 22px rgba(255,122,24,.55);}
+
+/* ---- TARJETAS ---- */
+.card:hover{border-color:rgba(255,150,60,.5);box-shadow:0 0 26px rgba(255,122,24,.14),var(--shadow-card);}
+.card .diamond{filter:drop-shadow(0 0 14px rgba(255,150,60,.55));}
+.popular-label{background:linear-gradient(90deg,var(--hw-orange),var(--hw-purple));color:#fff;}
+.stats{border-color:rgba(255,150,60,.28);}
+.stat-number{color:var(--hw-amber);text-shadow:0 0 14px rgba(255,122,24,.4);}
+.info-banner{border-color:rgba(255,150,60,.35);background:linear-gradient(90deg,rgba(255,122,24,.09),rgba(155,92,255,.07));}
+.info-banner strong{color:var(--hw-amber);}
+
+/* ---- SECCIÓN ACUMULATIVA ---- */
+.promo-section{border-color:rgba(255,140,40,.42);box-shadow:0 0 34px rgba(255,122,24,.10);}
+.promo-card{border-color:rgba(155,92,255,.45);}
+.promo-card:hover{border-color:rgba(255,150,60,.55);box-shadow:0 0 22px rgba(255,122,24,.12);}
+.promo-card h3{color:var(--hw-amber);}
+.step-number{background:linear-gradient(135deg,var(--hw-orange),var(--hw-purple));}
+.step h3{color:var(--hw-amber);}
+.contact h3{color:var(--hw-amber);}
+
+/* ---- PARTÍCULAS en tono calabaza ---- */
+#particles .particle{background:#ff8a24!important;box-shadow:0 0 9px rgba(255,122,24,.5);}
+
+/* ---- RESPONSIVE / ACCESIBILIDAD ---- */
 @media(max-width:560px){
-  .hero::before{left:0;top:18%;font-size:2rem}
-  .hero::after{right:0;top:17%;font-size:2rem}
+    .hw-float.pumpkin{top:13%}
+    .hw-float.ghost{top:30%}
+    .hw-spider{right:5%}
+}
+@media(prefers-reduced-motion:reduce){
+    .halloween-fog,.hw-float,.bat,.hw-spider,.hw-marquee-track,.featured::after,.hero-badge{animation:none!important}
 }
 
-
-/* Fondo Halloween de Diamond Store: coloca fondo_waloween.png junto a index.html */
-body {
-  background-image: linear-gradient(rgba(8, 3, 15, 0.72), rgba(8, 3, 15, 0.84)), url('fondo_waloween.png');
-  background-size: cover;
-  background-position: center top;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+/* Fondo WALOOWEEN personalizado: requiere fondo_waloween.png junto a index.html */
+body{
+    background-image:
+        linear-gradient(rgba(4, 3, 14, .76), rgba(4, 3, 14, .86)),
+        url("fondo_waloween.png"),
+        radial-gradient(ellipse at 10% 12%,rgba(255,92,0,.15),transparent 38%),
+        radial-gradient(ellipse at 90% 22%,rgba(124,58,237,.22),transparent 42%),
+        var(--bg);
+    background-size: cover, cover, auto, auto, auto;
+    background-position: center top, center top, center, center, center;
+    background-attachment: fixed, fixed, scroll, scroll, scroll;
+    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
 }
-
-
-/* =========================================================
-   DECORACIÓN WALOWEEN — telarañas, araña, murciélagos, niebla
-========================================================= */
-.halloween-deco{position:fixed;inset:0;z-index:60;pointer-events:none;overflow:hidden}
-
-/* ----- Luna embrujada ----- */
-.halloween-moon{
-  position:absolute;top:86px;right:9%;width:110px;height:110px;border-radius:50%;
-  background:radial-gradient(circle at 38% 34%,#fff7e0,#ffd98a 55%,#f5a623 100%);
-  box-shadow:0 0 60px 18px rgba(255,190,90,.28),0 0 140px 60px rgba(255,140,40,.12);
-  opacity:.92;
-}
-.halloween-moon::before,.halloween-moon::after{
-  content:"";position:absolute;border-radius:50%;
-  background:rgba(190,120,40,.28);
-}
-.halloween-moon::before{width:22px;height:22px;top:26%;left:30%}
-.halloween-moon::after{width:13px;height:13px;top:55%;left:58%}
-@keyframes moonDrift{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-.halloween-moon{animation:moonDrift 9s ease-in-out infinite}
-
-/* ----- Telarañas en las esquinas ----- */
-.web{position:absolute;width:clamp(110px,16vw,200px);opacity:.85;filter:drop-shadow(0 0 6px rgba(180,120,255,.35))}
-.web svg{width:100%;height:auto;display:block}
-.web-tl{top:0;left:0}
-.web-tr{top:0;right:0;transform:scaleX(-1)}
-.web-br{bottom:0;right:0;transform:rotate(180deg)}
-.web-bl{bottom:0;left:0;transform:scaleY(-1)}
-@keyframes webSway{0%,100%{opacity:.85}50%{opacity:.65}}
-.web{animation:webSway 6s ease-in-out infinite}
-
-/* ----- Araña colgante ----- */
-.spider-scene{position:absolute;top:0;right:22%}
-.spider-thread{
-  width:2px;height:150px;margin:0 auto;
-  background:linear-gradient(rgba(230,220,255,.65),rgba(230,220,255,.1));
-  transform-origin:top center;
-  animation:threadDrop 7s ease-in-out infinite;
-}
-@keyframes threadDrop{
-  0%{height:0}
-  35%{height:150px}
-  70%{height:118px}
-  100%{height:150px}
-}
-.spider{
-  position:relative;width:70px;height:60px;margin:-3px auto 0;
-  transform-origin:top center;
-  animation:spiderSway 3.2s ease-in-out infinite;
-}
-@keyframes spiderSway{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
-.spider-body{
-  position:absolute;left:50%;top:16px;transform:translateX(-50%);
-  width:32px;height:40px;border-radius:50% 50% 46% 46%;
-  background:radial-gradient(circle at 35% 28%,#5b2475,#180a26 72%);
-  box-shadow:0 0 20px rgba(155,44,214,.5);
-}
-.spider-body::after{ /* marca de hourglass estilo viuda */
-  content:"";position:absolute;inset:8px 10px;border-radius:50%;
-  background:rgba(255,122,24,.85);
-  clip-path:polygon(20% 0,80% 0,55% 38%,80% 100%,20% 100%,45% 38%);
-  opacity:.9;
-}
-.spider-head{
-  position:absolute;left:50%;top:2px;transform:translateX(-50%);
-  width:24px;height:20px;border-radius:50%;
-  background:radial-gradient(circle at 40% 35%,#6a2a8a,#14081f 78%);
-}
-.spider-eyes{position:absolute;left:50%;top:8px;transform:translateX(-50%);display:flex;gap:7px}
-.spider-eyes i{width:5px;height:5px;border-radius:50%;background:#ffb545;box-shadow:0 0 8px #ff7a18;animation:eyeGlow 2.4s infinite}
-@keyframes eyeGlow{50%{opacity:.4}}
-.spider-legs span{
-  position:absolute;width:30px;height:3px;border-radius:3px;
-  background:#14081f;transform-origin:right center;
-  animation:legWiggle 1.4s ease-in-out infinite;
-}
-@keyframes legWiggle{0%,100%{transform:rotate(var(--r)) translateY(0)}50%{transform:rotate(calc(var(--r) + 7deg)) translateY(-2px)}}
-.spider-legs .sl1{--r:-150deg;left:-14px;top:14px}
-.spider-legs .sl2{--r:-115deg;left:-16px;top:26px;animation-delay:.15s}
-.spider-legs .sl3{--r:-75deg;left:-16px;top:38px;animation-delay:.3s}
-.spider-legs .sl4{--r:-40deg;left:-12px;top:48px;animation-delay:.45s}
-.spider-legs .sr1{--r:150deg;right:-14px;top:14px;animation-delay:.2s}
-.spider-legs .sr2{--r:115deg;right:-16px;top:26px;animation-delay:.35s}
-.spider-legs .sr3{--r:75deg;right:-16px;top:38px;animation-delay:.5s}
-.spider-legs .sr4{--r:40deg;right:-12px;top:48px;animation-delay:.6s}
-
-/* ----- Murciélagos voladores ----- */
-.bat{position:absolute;font-size:clamp(1.4rem,3vw,2.4rem);opacity:0;filter:drop-shadow(0 0 10px rgba(120,40,180,.6))}
-.bat-1{top:16%;animation:flyAcross 17s linear infinite 2s}
-.bat-2{top:30%;font-size:clamp(1rem,2vw,1.6rem);animation:flyAcross 23s linear infinite 8s}
-.bat-3{top:10%;font-size:clamp(.9rem,1.6vw,1.3rem);animation:flyAcross 27s linear infinite 14s}
-.bat-4{top:42%;font-size:clamp(1.1rem,2.2vw,1.8rem);animation:flyAcross 21s linear infinite 5s}
-@keyframes flyAcross{
-  0%{left:-8%;opacity:0;transform:translateY(0) scaleX(1)}
-  8%{opacity:.85}
-  25%{transform:translateY(-34px) scaleX(1)}
-  50%{transform:translateY(22px) scaleX(1)}
-  75%{transform:translateY(-20px) scaleX(1)}
-  92%{opacity:.85}
-  100%{left:106%;opacity:0;transform:translateY(0) scaleX(1)}
-}
-
-/* ----- Bruja ocasional ----- */
-.witch-ride{
-  position:absolute;top:6%;font-size:clamp(1.8rem,4vw,3rem);opacity:0;
-  animation:witchFly 40s linear infinite 12s;
-  filter:drop-shadow(0 0 14px rgba(255,112,22,.55));
-}
-@keyframes witchFly{
-  0%{right:-10%;opacity:0;transform:translateY(0)}
-  5%{opacity:.9}
-  30%{transform:translateY(-46px)}
-  60%{transform:translateY(30px)}
-  95%{opacity:.9}
-  100%{right:108%;opacity:0;transform:translateY(0)}
-}
-
-/* ----- Fantasma errante ----- */
-.ghost-waloween{
-  position:absolute;bottom:14%;left:5%;font-size:clamp(1.8rem,4vw,3rem);
-  opacity:.5;filter:drop-shadow(0 0 18px rgba(200,220,255,.5));
-  animation:ghostFloat 11s ease-in-out infinite;
-}
-@keyframes ghostFloat{
-  0%,100%{transform:translate(0,0) rotate(-4deg);opacity:.35}
-  25%{transform:translate(46px,-56px) rotate(4deg);opacity:.6}
-  50%{transform:translate(90px,-20px) rotate(-3deg);opacity:.45}
-  75%{transform:translate(40px,20px) rotate(5deg);opacity:.6}
-}
-
-/* ----- Niebla baja ----- */
-.fog{position:absolute;bottom:-70px;width:130%;height:240px;filter:blur(34px);opacity:.32;border-radius:50%}
-.fog-1{
-  left:-20%;
-  background:radial-gradient(ellipse at center,rgba(139,34,214,.5),transparent 70%);
-  animation:fogMove 26s ease-in-out infinite alternate;
-}
-.fog-2{
-  right:-25%;
-  background:radial-gradient(ellipse at center,rgba(255,112,22,.34),transparent 70%);
-  animation:fogMove 32s ease-in-out infinite alternate-reverse;
-}
-@keyframes fogMove{0%{transform:translateX(-6%)}100%{transform:translateX(6%)}}
-
-/* ----- Calabazas y tumbas del footer ----- */
-footer{position:relative;overflow:hidden}
-.footer-pumpkin{
-  position:absolute;bottom:4px;font-size:2.6rem;
-  filter:drop-shadow(0 0 16px rgba(255,140,30,.6));
-  animation:pumpkinGlow 3s ease-in-out infinite;
-}
-.footer-pumpkin.fp-left{left:18px}
-.footer-pumpkin.fp-right{right:18px;animation-delay:1.4s}
-@keyframes pumpkinGlow{0%,100%{filter:drop-shadow(0 0 10px rgba(255,140,30,.45))}50%{filter:drop-shadow(0 0 26px rgba(255,150,40,.85))}}
-.footer-tomb{
-  position:absolute;bottom:0;font-size:1.7rem;opacity:.4;
-  filter:grayscale(.4) drop-shadow(0 0 8px rgba(120,120,160,.4));
-}
-.footer-tomb.t1{left:76px}
-.footer-tomb.t2{right:80px;font-size:1.3rem;opacity:.3}
-.footer-tomb.t3{right:130px;font-size:1.1rem;opacity:.22}
-
-/* ----- Títulos con parpadeo sutil de vela ----- */
-@keyframes candleFlicker{
-  0%,100%{text-shadow:0 0 22px rgba(255,112,22,.55)}
-  45%{text-shadow:0 0 14px rgba(255,112,22,.3)}
-  50%{text-shadow:0 0 30px rgba(255,140,40,.8)}
-  55%{text-shadow:0 0 16px rgba(255,112,22,.35)}
-}
-.section-title .accent{animation:candleFlicker 6s infinite}
-
-/* ----- Ajustes responsive de la decoración ----- */
-@media(max-width:700px){
-  .halloween-moon{width:64px;height:64px;top:96px;right:6%}
-  .spider-scene{right:10%}
-  .spider-thread{animation-duration:5.5s}
-  .ghost-waloween{left:2%;bottom:20%}
-  .footer-pumpkin{font-size:1.9rem}
-  .footer-pumpkin.fp-left{left:8px}
-  .footer-pumpkin.fp-right{right:8px}
-  .footer-tomb{display:none}
-}
-
 </style>
 </head>
 
@@ -727,46 +612,27 @@ footer{position:relative;overflow:hidden}
         </defs>
     </svg>
     <div class="loader-title">DIAMOND STORE</div>
-    <div class="loader-subtitle">Invocando la experiencia de Halloween</div>
+    <div class="loader-subtitle">Preparando tu experiencia</div>
     <div class="loader-progress"><div class="loader-bar" id="loaderBar"></div></div>
     <div class="loader-percent" id="loaderPercent">0%</div>
 </div>
 
 <div id="particles" aria-hidden="true"></div>
 
-<!-- ══════════════ DECORACIÓN WALOWEEN ══════════════ -->
-<div class="halloween-deco" aria-hidden="true">
-    <div class="halloween-moon"></div>
-
-    <div class="web web-tl"><svg class="web-svg" viewBox="0 0 200 200" aria-hidden="true"><g stroke="rgba(228,216,255,.5)" stroke-width="1.4" fill="none" stroke-linecap="round"><line x1="0" y1="0" x2="195.0" y2="0.0"/><line x1="0" y1="0" x2="188.4" y2="50.5"/><line x1="0" y1="0" x2="168.9" y2="97.5"/><line x1="0" y1="0" x2="137.9" y2="137.9"/><line x1="0" y1="0" x2="97.5" y2="168.9"/><line x1="0" y1="0" x2="50.5" y2="188.4"/><line x1="0" y1="0" x2="0.0" y2="195.0"/><path d="M 45.0 0.0 Q 44.6 5.9 43.5 11.6 Q 41.6 17.2 39.0 22.5 Q 35.7 27.4 31.8 31.8 Q 27.4 35.7 22.5 39.0 Q 17.2 41.6 11.6 43.5 Q 5.9 44.6 0.0 45.0 "/><path d="M 85.0 0.0 Q 84.3 11.1 82.1 22.0 Q 78.5 32.5 73.6 42.5 Q 67.4 51.7 60.1 60.1 Q 51.7 67.4 42.5 73.6 Q 32.5 78.5 22.0 82.1 Q 11.1 84.3 0.0 85.0 "/><path d="M 125.0 0.0 Q 123.9 16.3 120.7 32.4 Q 115.5 47.8 108.3 62.5 Q 99.2 76.1 88.4 88.4 Q 76.1 99.2 62.5 108.3 Q 47.8 115.5 32.4 120.7 Q 16.3 123.9 0.0 125.0 "/><path d="M 160.0 0.0 Q 158.6 20.9 154.5 41.4 Q 147.8 61.2 138.6 80.0 Q 126.9 97.4 113.1 113.1 Q 97.4 126.9 80.0 138.6 Q 61.2 147.8 41.4 154.5 Q 20.9 158.6 0.0 160.0 "/></g></svg></div>
-    <div class="web web-tr"><svg class="web-svg" viewBox="0 0 200 200" aria-hidden="true"><g stroke="rgba(228,216,255,.5)" stroke-width="1.4" fill="none" stroke-linecap="round"><line x1="0" y1="0" x2="195.0" y2="0.0"/><line x1="0" y1="0" x2="188.4" y2="50.5"/><line x1="0" y1="0" x2="168.9" y2="97.5"/><line x1="0" y1="0" x2="137.9" y2="137.9"/><line x1="0" y1="0" x2="97.5" y2="168.9"/><line x1="0" y1="0" x2="50.5" y2="188.4"/><line x1="0" y1="0" x2="0.0" y2="195.0"/><path d="M 45.0 0.0 Q 44.6 5.9 43.5 11.6 Q 41.6 17.2 39.0 22.5 Q 35.7 27.4 31.8 31.8 Q 27.4 35.7 22.5 39.0 Q 17.2 41.6 11.6 43.5 Q 5.9 44.6 0.0 45.0 "/><path d="M 85.0 0.0 Q 84.3 11.1 82.1 22.0 Q 78.5 32.5 73.6 42.5 Q 67.4 51.7 60.1 60.1 Q 51.7 67.4 42.5 73.6 Q 32.5 78.5 22.0 82.1 Q 11.1 84.3 0.0 85.0 "/><path d="M 125.0 0.0 Q 123.9 16.3 120.7 32.4 Q 115.5 47.8 108.3 62.5 Q 99.2 76.1 88.4 88.4 Q 76.1 99.2 62.5 108.3 Q 47.8 115.5 32.4 120.7 Q 16.3 123.9 0.0 125.0 "/><path d="M 160.0 0.0 Q 158.6 20.9 154.5 41.4 Q 147.8 61.2 138.6 80.0 Q 126.9 97.4 113.1 113.1 Q 97.4 126.9 80.0 138.6 Q 61.2 147.8 41.4 154.5 Q 20.9 158.6 0.0 160.0 "/></g></svg></div>
-    <div class="web web-br"><svg class="web-svg" viewBox="0 0 200 200" aria-hidden="true"><g stroke="rgba(228,216,255,.5)" stroke-width="1.4" fill="none" stroke-linecap="round"><line x1="0" y1="0" x2="195.0" y2="0.0"/><line x1="0" y1="0" x2="188.4" y2="50.5"/><line x1="0" y1="0" x2="168.9" y2="97.5"/><line x1="0" y1="0" x2="137.9" y2="137.9"/><line x1="0" y1="0" x2="97.5" y2="168.9"/><line x1="0" y1="0" x2="50.5" y2="188.4"/><line x1="0" y1="0" x2="0.0" y2="195.0"/><path d="M 45.0 0.0 Q 44.6 5.9 43.5 11.6 Q 41.6 17.2 39.0 22.5 Q 35.7 27.4 31.8 31.8 Q 27.4 35.7 22.5 39.0 Q 17.2 41.6 11.6 43.5 Q 5.9 44.6 0.0 45.0 "/><path d="M 85.0 0.0 Q 84.3 11.1 82.1 22.0 Q 78.5 32.5 73.6 42.5 Q 67.4 51.7 60.1 60.1 Q 51.7 67.4 42.5 73.6 Q 32.5 78.5 22.0 82.1 Q 11.1 84.3 0.0 85.0 "/><path d="M 125.0 0.0 Q 123.9 16.3 120.7 32.4 Q 115.5 47.8 108.3 62.5 Q 99.2 76.1 88.4 88.4 Q 76.1 99.2 62.5 108.3 Q 47.8 115.5 32.4 120.7 Q 16.3 123.9 0.0 125.0 "/><path d="M 160.0 0.0 Q 158.6 20.9 154.5 41.4 Q 147.8 61.2 138.6 80.0 Q 126.9 97.4 113.1 113.1 Q 97.4 126.9 80.0 138.6 Q 61.2 147.8 41.4 154.5 Q 20.9 158.6 0.0 160.0 "/></g></svg></div>
-    <div class="web web-bl"><svg class="web-svg" viewBox="0 0 200 200" aria-hidden="true"><g stroke="rgba(228,216,255,.5)" stroke-width="1.4" fill="none" stroke-linecap="round"><line x1="0" y1="0" x2="195.0" y2="0.0"/><line x1="0" y1="0" x2="188.4" y2="50.5"/><line x1="0" y1="0" x2="168.9" y2="97.5"/><line x1="0" y1="0" x2="137.9" y2="137.9"/><line x1="0" y1="0" x2="97.5" y2="168.9"/><line x1="0" y1="0" x2="50.5" y2="188.4"/><line x1="0" y1="0" x2="0.0" y2="195.0"/><path d="M 45.0 0.0 Q 44.6 5.9 43.5 11.6 Q 41.6 17.2 39.0 22.5 Q 35.7 27.4 31.8 31.8 Q 27.4 35.7 22.5 39.0 Q 17.2 41.6 11.6 43.5 Q 5.9 44.6 0.0 45.0 "/><path d="M 85.0 0.0 Q 84.3 11.1 82.1 22.0 Q 78.5 32.5 73.6 42.5 Q 67.4 51.7 60.1 60.1 Q 51.7 67.4 42.5 73.6 Q 32.5 78.5 22.0 82.1 Q 11.1 84.3 0.0 85.0 "/><path d="M 125.0 0.0 Q 123.9 16.3 120.7 32.4 Q 115.5 47.8 108.3 62.5 Q 99.2 76.1 88.4 88.4 Q 76.1 99.2 62.5 108.3 Q 47.8 115.5 32.4 120.7 Q 16.3 123.9 0.0 125.0 "/><path d="M 160.0 0.0 Q 158.6 20.9 154.5 41.4 Q 147.8 61.2 138.6 80.0 Q 126.9 97.4 113.1 113.1 Q 97.4 126.9 80.0 138.6 Q 61.2 147.8 41.4 154.5 Q 20.9 158.6 0.0 160.0 "/></g></svg></div>
-
-    <div class="spider-scene">
-        <div class="spider-thread"></div>
-        <div class="spider">
-            <div class="spider-legs">
-                <span class="sl1"></span><span class="sl2"></span><span class="sl3"></span><span class="sl4"></span>
-                <span class="sr1"></span><span class="sr2"></span><span class="sr3"></span><span class="sr4"></span>
-            </div>
-            <div class="spider-body"></div>
-            <div class="spider-head"></div>
-            <div class="spider-eyes"><i></i><i></i></div>
-        </div>
-    </div>
-
-    <div class="bat bat-1">🦇</div>
-    <div class="bat bat-2">🦇</div>
-    <div class="bat bat-3">🦇</div>
-    <div class="bat bat-4">🦇</div>
-    <div class="witch-ride">🧙‍♀️</div>
-    <div class="ghost-waloween">👻</div>
-
-    <div class="fog fog-1"></div>
-    <div class="fog fog-2"></div>
+<!-- 🎃 DECORACIONES WALOOWEEN -->
+<div class="halloween-fog fog-1" aria-hidden="true"></div>
+<div class="halloween-fog fog-2" aria-hidden="true"></div>
+<div class="halloween-fog fog-3" aria-hidden="true"></div>
+<div class="hw-bats" aria-hidden="true">
+    <span class="bat b1">🦇</span>
+    <span class="bat b2">🦇</span>
+    <span class="bat b3">🦇</span>
 </div>
-
+<div class="hw-spider" aria-hidden="true"><span class="string"></span><span class="body">🕷️</span></div>
+<div class="hw-float pumpkin" aria-hidden="true">🎃</div>
+<div class="hw-float ghost" aria-hidden="true">👻</div>
+<div class="hw-float skull" aria-hidden="true">💀</div>
+<div class="hw-float candle" aria-hidden="true">🕯️</div>
 
 <!-- NAVBAR -->
 <nav class="navbar" id="navbar">
@@ -817,13 +683,13 @@ footer{position:relative;overflow:hidden}
         <defs><linearGradient id="heroGrad" x1="20" y1="5" x2="80" y2="95"><stop offset="0%" stop-color="rgba(0,229,255,.55)"/><stop offset="55%" stop-color="rgba(124,58,237,.45)"/><stop offset="100%" stop-color="rgba(0,229,255,.7)"/></linearGradient></defs>
     </svg>
 
-    <div class="hero-badge"><span class="dot"></span> 🎃 ESPECIAL DE HALLOWEEN · RECARGAS GAMER</div>
+    <div class="hero-badge"><span class="dot"></span> 🎃 WALOOWEEN · RECARGAS DE MIEDO · WHATSAPP</div>
 
     <h1><span id="typewriter"></span><span class="cursor" aria-hidden="true"></span></h1>
 
     <p class="hero-description">
-        La noche más aterradora también trae diamantes 💎. Explora nuestros paquetes y promociones acumulativas.
-        <br><strong>¡Recarga, acumula y disfruta de Free Fire… si te atreves! 👻</strong>
+        Consigue tus diamantes 💎 de forma sencilla y consulta nuestros paquetes y promociones acumulativas.
+        <br><strong>¡Recarga, acumula y disfruta de Free Fire!</strong>
     </p>
 
     <div class="hero-buttons">
@@ -847,6 +713,11 @@ footer{position:relative;overflow:hidden}
     </div>
 </section>
 
+<!-- 🎃 MARQUEE WALOOWEEN -->
+<div class="hw-marquee" aria-hidden="true">
+    <div class="hw-marquee-track"><span>🎃 WALOOWEEN &nbsp;✦&nbsp; 💎 RECARGAS DE MIEDO &nbsp;✦&nbsp; 🔥 LOS MEJORES PRECIOS &nbsp;✦&nbsp; 🦇 ATENCIÓN POR WHATSAPP &nbsp;✦&nbsp; </span><span>🎃 WALOOWEEN &nbsp;✦&nbsp; 💎 RECARGAS DE MIEDO &nbsp;✦&nbsp; 🔥 LOS MEJORES PRECIOS &nbsp;✦&nbsp; 🦇 ATENCIÓN POR WHATSAPP &nbsp;✦&nbsp; </span></div>
+</div>
+
 <!-- PAYMENT INFO -->
 <div class="info-banner reveal">
     <div class="info-icon">💳</div>
@@ -856,15 +727,9 @@ footer{position:relative;overflow:hidden}
     </div>
 </div>
 
-<section style="margin:18px auto;padding:18px;text-align:center;border:2px solid #f5c542;border-radius:16px;background:linear-gradient(135deg,#17121f,#33200b);max-width:1000px">
-  <h2 style="margin:0 0 8px;color:#ffd34d">⚫🔥 ¡VIERNES NEGRO · EVENTO ACTIVO! 🔥⚫</h2>
-  <p style="margin:0;color:#fff">¡El evento está activo! 🖤 Aprovecha un <strong>25 % DE DESCUENTO</strong> en todos los paquetes de diamantes.</p>
-  <p style="margin:8px 0 0;color:#ffe8a3;font-size:13px">Promoción temporal de Viernes Negro. Los precios promocionales estarán disponibles hasta que termine el evento. Consulta por WhatsApp antes de pagar.</p>
-</section>
-
 <!-- FEATURED -->
 <section class="reveal">
-    <span class="eyebrow">⚫ VIERNES NEGRO · 25 % DE DESCUENTO</span>
+    <span class="eyebrow">Oferta destacada</span>
     <h2 class="section-title">🔥 EL <span class="accent">FAVORITO</span> DE LA COMUNIDAD</h2>
     <p class="section-subtitle">El paquete más pedido por nuestros clientes, con el mejor ahorro por diamante.</p>
 
@@ -872,10 +737,10 @@ footer{position:relative;overflow:hidden}
         <div class="featured-badge">⭐ MÁS POPULAR</div>
         <h3>PAQUETE FAVORITO</h3>
         <div class="featured-diamonds">💎 <span class="accent">500</span> DIAMANTES</div>
-        <div class="old-price">Precio anterior: $14.000 COP</div>
-        <div class="featured-price">$10.500 COP</div>
-        <div class="save">🔥 Ahorras $3.500 COP · 25 % OFF</div>
-        <button class="btn btn-primary" onclick="openModal(500,10500,3500,14000)">COMPRAR 500 💎</button>
+        <div class="old-price">Precio de referencia: $20.000 COP</div>
+        <div class="featured-price">$17.500 COP</div>
+        <div class="save">💰 Ahorras $1.400 COP</div>
+        <button class="btn btn-primary" onclick="openModal(500,17500,1400,20000)">COMPRAR 500 💎</button>
     </div>
 </section>
 
@@ -986,11 +851,6 @@ footer{position:relative;overflow:hidden}
 
 <!-- FOOTER -->
 <footer>
-    <span class="footer-pumpkin fp-left">🎃</span>
-    <span class="footer-pumpkin fp-right">🎃</span>
-    <span class="footer-tomb t1">🪦</span>
-    <span class="footer-tomb t2">🪦</span>
-    <span class="footer-tomb t3">🪦</span>
     <strong>💎 DIAMOND STORE</strong>
     <p>Recargas y atención para jugadores.</p>
     <p>*Las estadísticas mostradas son ilustrativas. Los precios y promociones pueden cambiar.</p>
@@ -1091,15 +951,13 @@ footer{position:relative;overflow:hidden}
 /* =========================================================
    DATOS
 ========================================================= */
-/* Precios temporales de Viernes Negro; el paquete de 5.000 tiene precio especial de $110.000 COP. */
-const BLACK_FRIDAY_DISCOUNT = 0.25;
 const packages = [
-    {diamonds:100, basePrice:3700, price:3000, reference:3700},
-    {diamonds:300, basePrice:10000, price:7000, reference:10000},
-    {diamonds:500, basePrice:16000, price:12000, reference:16000, popular:true},
-    {diamonds:1000, basePrice:29500, price:22000, reference:29500},
-    {diamonds:2000, basePrice:58000, price:43000, reference:58000},
-    {diamonds:5000, basePrice:145000, price:110000, reference:145000}
+    {diamonds:100, price:3500, reference:4200},
+    {diamonds:300, price:10500, reference:12000},
+    {diamonds:500, price:17500, reference:20000, popular:true},
+    {diamonds:1000, price:35000, reference:38600},
+    {diamonds:2000, price:70000, reference:79600},
+    {diamonds:5000, price:175000, reference:182400}
 ];
 
 let currentPackage = null;
@@ -1362,18 +1220,20 @@ function renderPackages(){
     packages.forEach(pkg=>{
         const card = document.createElement('div');
         card.className = 'card' + (pkg.popular ? ' popular' : '');
-        const basePrice = pkg.basePrice ?? pkg.price;
-        const saving = basePrice - pkg.price;
-        const savingText = saving > 0 ? `🔥 Ahorras $${saving.toLocaleString('es-CO')} COP (25 % OFF)` : '';
+        let savingText = '';
+        if(pkg.reference){
+            const saving = pkg.reference - pkg.price;
+            savingText = `💰 Ahorras $${saving.toLocaleString('es-CO')} COP`;
+        }
         card.innerHTML = `
             ${pkg.popular ? `<div class="popular-label">⭐ MÁS POPULAR</div>` : ''}
             <div class="diamond">💎</div>
             <div class="amount">${pkg.diamonds.toLocaleString('es-CO')}</div>
             <div class="amount-label">DIAMANTES</div>
-            <div class="reference"><span style="text-decoration:line-through">Antes: $${basePrice.toLocaleString('es-CO')} COP</span></div>
             <div class="price">$${pkg.price.toLocaleString('es-CO')} COP</div>
+            <div class="reference">${pkg.reference ? `Referencia: $${pkg.reference.toLocaleString('es-CO')} COP` : 'Precio competitivo'}</div>
             <div class="saving">${savingText}</div>
-            <button class="buy" onclick="openModal(${pkg.diamonds},${pkg.price},${saving},${basePrice})">COMPRAR 💎</button>
+            <button class="buy" onclick="openModal(${pkg.diamonds},${pkg.price},${pkg.reference ? pkg.reference-pkg.price : 0},${pkg.reference || 0})">COMPRAR 💎</button>
         `;
         container.appendChild(card);
     });
